@@ -1,5 +1,7 @@
 import com.palantir.gradle.gitversion.VersionDetails
 import groovy.lang.Closure
+import java.lang.String.format
+import java.lang.String.valueOf
 
 plugins {
     id("java")
@@ -9,6 +11,8 @@ plugins {
 }
 
 val versionDetails: Closure<VersionDetails> by extra
+fun projectVersion(): String = if (versionDetails().branchName == "ver/latest")
+    valueOf(project.version) else format("%s (git/%s)", project.version, versionDetails().gitHash)
 
 project.group = project.parent?.group!!
 project.version = project.parent?.version!!
@@ -18,7 +22,7 @@ java {
 }
 
 blossom {
-    replaceToken("{version}", project.version)
+    replaceToken("{version}", projectVersion())
     replaceToken("{gitBranch}", versionDetails().branchName)
     replaceToken("{gitCommitHash}", versionDetails().gitHashFull)
 }
@@ -79,7 +83,7 @@ dependencies {
 tasks {
 
     processResources {
-        inputs.property("version", project.version)
+        inputs.property("version", projectVersion())
         expand(inputs.properties)
     }
 
