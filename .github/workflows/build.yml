@@ -13,6 +13,8 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+      - name: 'Assign Permissions'
+        run: 'chmod +x ./gradlew'
       - name: 'Build (Gradle)'
         run: './gradlew core:build'
       - name: 'Upload (API)'
