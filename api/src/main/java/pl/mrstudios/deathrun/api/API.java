@@ -1,47 +1,66 @@
 package pl.mrstudios.deathrun.api;
 
-import org.bukkit.plugin.PluginDescriptionFile;
 import org.jetbrains.annotations.NotNull;
 import pl.mrstudios.deathrun.api.arena.IArena;
 import pl.mrstudios.deathrun.api.arena.trap.ITrapRegistry;
 
-public class API {
+import static org.jetbrains.annotations.ApiStatus.*;
 
-    private final @NotNull IArena arena;
-    private final @NotNull ITrapRegistry trapRegistry;
+public record API(
+        @NotNull IArena arenaInstance,
+        @NotNull ITrapRegistry trapRegistryInstance
+) {
 
-    private final @NotNull String version;
-
-    public API(
-            @NotNull IArena arena,
-            @NotNull ITrapRegistry trapRegistry,
-            @NotNull PluginDescriptionFile pluginDescriptionFile
-    ) {
-
-        setInstance(this);
-
-        this.arena = arena;
-        this.trapRegistry = trapRegistry;
-        this.version = pluginDescriptionFile.getVersion();
-
-    }
-
+    @Deprecated(
+            forRemoval = true,
+            since = "1.3.0"
+    )
+    @ScheduledForRemoval(inVersion = "1.4.0")
     public @NotNull IArena getArena() {
-        return arena;
+        return this.arenaInstance();
     }
 
+    @Deprecated(
+            forRemoval = true,
+            since = "1.3.0"
+    )
+    @ScheduledForRemoval(inVersion = "1.4.0")
     public @NotNull ITrapRegistry getTrapRegistry() {
-        return trapRegistry;
+        return this.trapRegistryInstance();
     }
 
+    @Deprecated(
+            forRemoval = true,
+            since = "1.3.0"
+    )
+    @ScheduledForRemoval(inVersion = "1.4.0")
     public @NotNull String getVersion() {
-        return version;
+        return pluginVersion();
     }
 
+    @Deprecated(
+            forRemoval = true,
+            since = "1.3.0"
+    )
+    @ScheduledForRemoval(inVersion = "1.4.0")
     public static @NotNull API instance;
 
-    protected static void setInstance(@NotNull API api) {
-        instance = api;
+    /* Version Related */
+    public @NotNull String pluginVersion() {
+        return "{version}";
+    }
+
+    public @NotNull String pluginGitBranch() {
+        return "{gitBranch}";
+    }
+
+    public @NotNull String pluginGitCommit() {
+        return "{gitCommitHash}";
+    }
+
+    /* Static Methods */
+    public static @NotNull API apiInstance() {
+        return instance;
     }
 
 }

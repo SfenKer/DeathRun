@@ -18,6 +18,7 @@ java {
 }
 
 blossom {
+    replaceToken("{version}", project.version)
     replaceToken("{gitBranch}", versionDetails().branchName)
     replaceToken("{gitCommitHash}", versionDetails().gitHashFull)
 }
