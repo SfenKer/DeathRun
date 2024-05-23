@@ -43,7 +43,10 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.stream.Stream;
 
+import static dev.rollczi.litecommands.annotations.LiteCommandsAnnotations.of;
+import static dev.rollczi.litecommands.schematic.SchematicFormat.angleBrackets;
 import static java.lang.System.currentTimeMillis;
+import static java.util.Arrays.asList;
 import static java.util.Arrays.stream;
 
 @SuppressWarnings("all")
@@ -115,7 +118,7 @@ public class Bootstrap extends JavaPlugin {
                 .register(Configuration.class, this.configuration);
 
         /* Register Traps */
-        Arrays.asList(
+        asList(
                 TrapTNT.class,
                 TrapAppearingBlocks.class,
                 TrapDisappearingBlocks.class,
@@ -133,8 +136,8 @@ public class Bootstrap extends JavaPlugin {
                 .missingPermission(this.injector.inject(NoCommandPermissionsHandler.class))
 
                 /* Commands */
-                .commands(LiteCommandsAnnotations.of(
-                        new Reflections<>("pl.mrstudios.deathrun")
+                .commands(of(
+                        new Reflections<>("pl.mrstudios.deathrun.command")
                                 .getClassesAnnotatedWith(Command.class)
                                 .stream().map(this.injector::inject)
                                 .filter(Objects::nonNull)
@@ -142,7 +145,7 @@ public class Bootstrap extends JavaPlugin {
                 ))
 
                 /* Schematic */
-                .schematicGenerator(SchematicFormat.angleBrackets())
+                .schematicGenerator(angleBrackets())
 
                 /* Suggesters */
                 .argumentSuggester(String.class, ArgumentKey.of("type"), SuggestionResult.of(this.trapRegistry.list()))
@@ -152,7 +155,7 @@ public class Bootstrap extends JavaPlugin {
 
         /* Register Listeners */
         if (!this.configuration.map().arenaSetupEnabled)
-            new Reflections<Listener>("pl.mrstudios.deathrun")
+            new Reflections<Listener>("pl.mrstudios.deathrun.arena.listener")
                     .getClassesImplementing(Listener.class).stream().filter(
                             (listener) -> stream(listener.getConstructors())
                                     .anyMatch((constructor) -> constructor.isAnnotationPresent(Inject.class))
