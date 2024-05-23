@@ -13,8 +13,8 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-      - name: 'Build (Maven)'
-        run: 'mvn clean package'
+      - name: 'Build (Gradle)'
+        run: './gradlew core:build'
       - name: 'Upload (API)'
         uses: 'actions/upload-artifact@v3'
         with:
