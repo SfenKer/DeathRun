@@ -1,9 +1,7 @@
 name: 'DeathRun Build'
 on:
   push:
-    branches: [ "ver/latest" ]
   pull_request:
-    branches: [ "ver/latest" ]
 jobs:
   build:
     runs-on: 'ubuntu-latest'
