@@ -1,7 +1,7 @@
 # Plugin Information
-name: '${project.name}'
-description: '${project.description}'
-version: '${project.parent.version}'
+name: 'DeathRun'
+description: 'An minigame based on popular game from HiveMC server.'
+version: '${version}'
 
 # Dependencies
 softdepend:
