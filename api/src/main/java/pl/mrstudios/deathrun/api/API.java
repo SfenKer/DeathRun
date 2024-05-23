@@ -1,10 +1,14 @@
 package pl.mrstudios.deathrun.api;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import pl.mrstudios.deathrun.api.arena.IArena;
 import pl.mrstudios.deathrun.api.arena.trap.ITrapRegistry;
 
-import static org.jetbrains.annotations.ApiStatus.*;
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
+import static org.jetbrains.annotations.ApiStatus.Internal;
+import static org.jetbrains.annotations.ApiStatus.ScheduledForRemoval;
 
 public record API(
         @NotNull IArena arenaInstance,
@@ -43,7 +47,7 @@ public record API(
             since = "1.3.0"
     )
     @ScheduledForRemoval(inVersion = "1.4.0")
-    public static @NotNull API instance;
+    public static @Nullable API instance;
 
     /* Version Related */
     public @NotNull String pluginVersion() {
@@ -60,7 +64,19 @@ public record API(
 
     /* Static Methods */
     public static @NotNull API apiInstance() {
-        return instance;
+        return checkNotNull(instance, "Instance of API is not initialized yet!");
+    }
+
+    @Internal
+    public static void createInstance(
+            @NotNull IArena arenaInstance,
+            @NotNull ITrapRegistry trapRegistryInstance
+    ) {
+        checkArgument(instance == null, "Instance of API is already initialized!");
+        instance = new API(
+                arenaInstance,
+                trapRegistryInstance
+        );
     }
 
 }

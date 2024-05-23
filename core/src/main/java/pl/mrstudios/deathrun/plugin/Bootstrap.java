@@ -2,11 +2,9 @@ package pl.mrstudios.deathrun.plugin;
 
 import com.sk89q.worldedit.WorldEdit;
 import dev.rollczi.litecommands.LiteCommands;
-import dev.rollczi.litecommands.annotations.LiteCommandsAnnotations;
 import dev.rollczi.litecommands.annotations.command.Command;
 import dev.rollczi.litecommands.argument.ArgumentKey;
 import dev.rollczi.litecommands.bukkit.LiteCommandsBukkit;
-import dev.rollczi.litecommands.schematic.SchematicFormat;
 import dev.rollczi.litecommands.suggestion.SuggestionResult;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -20,7 +18,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import pl.mrstudios.commons.inject.Injector;
 import pl.mrstudios.commons.inject.annotation.Inject;
 import pl.mrstudios.commons.reflection.Reflections;
-import pl.mrstudios.deathrun.api.API;
 import pl.mrstudios.deathrun.arena.Arena;
 import pl.mrstudios.deathrun.arena.ArenaServiceRunnable;
 import pl.mrstudios.deathrun.arena.trap.TrapRegistry;
@@ -39,7 +36,6 @@ import pl.mrstudios.deathrun.exception.MissingDependencyException;
 import pl.mrstudios.deathrun.util.ZipUtil;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.Objects;
 import java.util.stream.Stream;
 
@@ -48,14 +44,14 @@ import static dev.rollczi.litecommands.schematic.SchematicFormat.angleBrackets;
 import static java.lang.System.currentTimeMillis;
 import static java.util.Arrays.asList;
 import static java.util.Arrays.stream;
+import static pl.mrstudios.deathrun.api.API.createInstance;
 
 @SuppressWarnings("all")
 public class Bootstrap extends JavaPlugin {
 
     private Arena arena;
     private TrapRegistry trapRegistry;
-
-
+    
     private MiniMessage miniMessage;
     private BukkitAudiences audiences;
     private BungeeComponentSerializer bungeeComponentSerializer;
@@ -170,7 +166,7 @@ public class Bootstrap extends JavaPlugin {
                     .runTaskTimer(this, 0, 20);
 
         /* Initialize API */
-        new API(this.arena, this.trapRegistry);
+        createInstance(this.arena, this.trapRegistry);
 
         /* Set Max Players */
         if (!this.configuration.map().arenaSetupEnabled)
