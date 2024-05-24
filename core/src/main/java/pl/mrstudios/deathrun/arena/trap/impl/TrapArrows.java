@@ -49,26 +49,6 @@ public class TrapArrows extends Trap {
     }
 
     @Override
-    public @NotNull Location getButton() {
-        return super.button;
-    }
-
-    @Override
-    public void setButton(@NotNull Location location) {
-        super.button = location;
-    }
-
-    @Override
-    public @NotNull List<Location> getLocations() {
-        return super.locations;
-    }
-
-    @Override
-    public void setLocations(@NotNull List<Location> locations) {
-        super.locations = locations;
-    }
-
-    @Override
     public @NotNull Duration getDuration() {
         return ZERO;
     }
