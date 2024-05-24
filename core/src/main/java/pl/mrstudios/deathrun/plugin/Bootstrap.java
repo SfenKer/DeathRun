@@ -21,10 +21,7 @@ import pl.mrstudios.commons.reflection.Reflections;
 import pl.mrstudios.deathrun.arena.Arena;
 import pl.mrstudios.deathrun.arena.ArenaServiceRunnable;
 import pl.mrstudios.deathrun.arena.trap.TrapRegistry;
-import pl.mrstudios.deathrun.arena.trap.impl.TrapAppearingBlocks;
-import pl.mrstudios.deathrun.arena.trap.impl.TrapArrows;
-import pl.mrstudios.deathrun.arena.trap.impl.TrapDisappearingBlocks;
-import pl.mrstudios.deathrun.arena.trap.impl.TrapTNT;
+import pl.mrstudios.deathrun.arena.trap.impl.*;
 import pl.mrstudios.deathrun.command.handler.InvalidCommandUsageHandler;
 import pl.mrstudios.deathrun.command.handler.NoCommandPermissionsHandler;
 import pl.mrstudios.deathrun.config.Configuration;
@@ -118,7 +115,8 @@ public class Bootstrap extends JavaPlugin {
                 TrapTNT.class,
                 TrapAppearingBlocks.class,
                 TrapDisappearingBlocks.class,
-                TrapArrows.class
+                TrapArrows.class,
+                TrapParticles.class
         ).forEach(this.trapRegistry::register);
 
         /* Register Commands */
