@@ -2,11 +2,9 @@ package pl.mrstudios.deathrun.plugin;
 
 import com.sk89q.worldedit.WorldEdit;
 import dev.rollczi.litecommands.LiteCommands;
-import dev.rollczi.litecommands.annotations.LiteCommandsAnnotations;
 import dev.rollczi.litecommands.annotations.command.Command;
 import dev.rollczi.litecommands.argument.ArgumentKey;
 import dev.rollczi.litecommands.bukkit.LiteCommandsBukkit;
-import dev.rollczi.litecommands.schematic.SchematicFormat;
 import dev.rollczi.litecommands.suggestion.SuggestionResult;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -20,14 +18,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 import pl.mrstudios.commons.inject.Injector;
 import pl.mrstudios.commons.inject.annotation.Inject;
 import pl.mrstudios.commons.reflection.Reflections;
-import pl.mrstudios.deathrun.api.API;
 import pl.mrstudios.deathrun.arena.Arena;
 import pl.mrstudios.deathrun.arena.ArenaServiceRunnable;
 import pl.mrstudios.deathrun.arena.trap.TrapRegistry;
-import pl.mrstudios.deathrun.arena.trap.impl.TrapAppearingBlocks;
-import pl.mrstudios.deathrun.arena.trap.impl.TrapArrows;
-import pl.mrstudios.deathrun.arena.trap.impl.TrapDisappearingBlocks;
-import pl.mrstudios.deathrun.arena.trap.impl.TrapTNT;
+import pl.mrstudios.deathrun.arena.trap.impl.*;
 import pl.mrstudios.deathrun.command.handler.InvalidCommandUsageHandler;
 import pl.mrstudios.deathrun.command.handler.NoCommandPermissionsHandler;
 import pl.mrstudios.deathrun.config.Configuration;
@@ -39,19 +33,22 @@ import pl.mrstudios.deathrun.exception.MissingDependencyException;
 import pl.mrstudios.deathrun.util.ZipUtil;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.Objects;
 import java.util.stream.Stream;
 
+import static dev.rollczi.litecommands.annotations.LiteCommandsAnnotations.of;
+import static dev.rollczi.litecommands.schematic.SchematicFormat.angleBrackets;
 import static java.lang.System.currentTimeMillis;
+import static java.util.Arrays.asList;
 import static java.util.Arrays.stream;
+import static pl.mrstudios.deathrun.api.API.apiInstance;
+import static pl.mrstudios.deathrun.api.API.createInstance;
 
 @SuppressWarnings("all")
 public class Bootstrap extends JavaPlugin {
 
     private Arena arena;
     private TrapRegistry trapRegistry;
-
 
     private MiniMessage miniMessage;
     private BukkitAudiences audiences;
@@ -115,11 +112,12 @@ public class Bootstrap extends JavaPlugin {
                 .register(Configuration.class, this.configuration);
 
         /* Register Traps */
-        Arrays.asList(
+        asList(
                 TrapTNT.class,
                 TrapAppearingBlocks.class,
                 TrapDisappearingBlocks.class,
-                TrapArrows.class
+                TrapArrows.class,
+                TrapParticles.class
         ).forEach(this.trapRegistry::register);
 
         /* Register Commands */
@@ -133,8 +131,8 @@ public class Bootstrap extends JavaPlugin {
                 .missingPermission(this.injector.inject(NoCommandPermissionsHandler.class))
 
                 /* Commands */
-                .commands(LiteCommandsAnnotations.of(
-                        new Reflections<>("pl.mrstudios.deathrun")
+                .commands(of(
+                        new Reflections<>("pl.mrstudios.deathrun.command")
                                 .getClassesAnnotatedWith(Command.class)
                                 .stream().map(this.injector::inject)
                                 .filter(Objects::nonNull)
@@ -142,7 +140,7 @@ public class Bootstrap extends JavaPlugin {
                 ))
 
                 /* Schematic */
-                .schematicGenerator(SchematicFormat.angleBrackets())
+                .schematicGenerator(angleBrackets())
 
                 /* Suggesters */
                 .argumentSuggester(String.class, ArgumentKey.of("type"), SuggestionResult.of(this.trapRegistry.list()))
@@ -152,7 +150,7 @@ public class Bootstrap extends JavaPlugin {
 
         /* Register Listeners */
         if (!this.configuration.map().arenaSetupEnabled)
-            new Reflections<Listener>("pl.mrstudios.deathrun")
+            new Reflections<Listener>("pl.mrstudios.deathrun.arena.listener")
                     .getClassesImplementing(Listener.class).stream().filter(
                             (listener) -> stream(listener.getConstructors())
                                     .anyMatch((constructor) -> constructor.isAnnotationPresent(Inject.class))
@@ -167,7 +165,7 @@ public class Bootstrap extends JavaPlugin {
                     .runTaskTimer(this, 0, 20);
 
         /* Initialize API */
-        new API(this.arena, this.trapRegistry, this.getDescription());
+        createInstance(this.arena, this.trapRegistry);
 
         /* Set Max Players */
         if (!this.configuration.map().arenaSetupEnabled)
@@ -176,6 +174,27 @@ public class Bootstrap extends JavaPlugin {
         /* Register Channel */
         if (!this.configuration.map().arenaSetupEnabled)
             this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
+
+        /* Check Branch */
+        if (!apiInstance().pluginGitBranch().equals("ver/latest"))
+            this.getLogger().warning(
+                    """
+                         
+                         --------------------------------------------------------
+                         
+                                       DEVELOPMENT BUILD DETECTED
+                                        
+                          You are running on a development build of the plugin,
+                          which may contain bugs and other issues. Please report
+                          any bugs you found on our GitHub repository.
+                          
+                          Version: {version}
+                          Current Branch: {branch}
+                         
+                         --------------------------------------------------------
+                         """.replace("{version}", apiInstance().pluginVersion())
+                            .replace("{branch}", apiInstance().pluginGitBranch())
+            );
 
     }
 

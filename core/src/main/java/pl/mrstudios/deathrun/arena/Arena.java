@@ -40,7 +40,9 @@ public class Arena implements IArena {
         this.remainingTime = 0;
     }
 
-    public void setSidebar(@NotNull Sidebar<Component> sidebar) {
+    public void setSidebar(
+            @NotNull Sidebar<Component> sidebar
+    ) {
         this.sidebar = sidebar;
     }
 

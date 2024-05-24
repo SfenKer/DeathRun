@@ -6,7 +6,6 @@ import org.bukkit.Server;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
@@ -27,6 +26,7 @@ import static java.time.Duration.ofSeconds;
 import static java.util.Optional.ofNullable;
 import static org.bukkit.Material.*;
 import static org.bukkit.event.EventPriority.MONITOR;
+import static org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK;
 import static pl.mrstudios.deathrun.api.arena.user.enums.Role.DEATH;
 
 public class ArenaButtonClickListener implements Listener {
@@ -50,10 +50,12 @@ public class ArenaButtonClickListener implements Listener {
     }
 
     @EventHandler(priority = MONITOR)
-    public void onArenaButtonClick(@NotNull PlayerInteractEvent event) {
+    public void onArenaButtonClick(
+            @NotNull PlayerInteractEvent event
+    ) {
 
         if (
-                event.getClickedBlock() == null || event.getAction() != Action.RIGHT_CLICK_BLOCK || this.materials.stream().noneMatch((material) -> material == event.getClickedBlock().getType())
+                event.getClickedBlock() == null || event.getAction() != RIGHT_CLICK_BLOCK || this.materials.stream().noneMatch((material) -> material == event.getClickedBlock().getType())
         ) return;
 
         ofNullable(this.arena.getUser(event.getPlayer()))
@@ -127,10 +129,14 @@ public class ArenaButtonClickListener implements Listener {
             CRIMSON_BUTTON,
             JUNGLE_BUTTON,
             SPRUCE_BUTTON,
-            WARPED_BUTTON
+            WARPED_BUTTON,
+            POLISHED_BLACKSTONE_BUTTON,
+            DARK_OAK_BUTTON
     );
 
-    protected String miniMessageToLegacy(String message) {
+    protected String miniMessageToLegacy(
+            @NotNull String message
+    ) {
         return ChatColor.translateAlternateColorCodes('&', message.replace("<red>", "&c")
                 .replace("<green>", "&a")
                 .replace("<yellow>", "&e")

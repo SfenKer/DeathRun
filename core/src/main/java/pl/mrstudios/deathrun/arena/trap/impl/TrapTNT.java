@@ -28,33 +28,18 @@ public class TrapTNT extends Trap {
     public void end() {}
 
     @Override
-    public void setExtra(Object... objects) {}
+    public void setExtra(
+            @Nullable Object... objects
+    ) {}
 
     @Override
-    public @NotNull List<Location> filter(@NotNull List<Location> list, @Nullable Object... objects) {
+    public @NotNull List<Location> filter(
+            @NotNull List<Location> list,
+            @Nullable Object... objects
+    ) {
         return list.stream()
                 .filter((location) -> location.getBlock().getType() == TNT)
                 .toList();
-    }
-
-    @Override
-    public @NotNull Location getButton() {
-        return super.button;
-    }
-
-    @Override
-    public void setButton(@NotNull Location location) {
-        super.button = location;
-    }
-
-    @Override
-    public @NotNull List<Location> getLocations() {
-        return super.locations;
-    }
-
-    @Override
-    public void setLocations(@NotNull List<Location> locations) {
-        super.locations = locations;
     }
 
     @Override

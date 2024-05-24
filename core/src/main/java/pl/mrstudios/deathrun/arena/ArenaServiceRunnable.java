@@ -334,7 +334,9 @@ public class ArenaServiceRunnable extends BukkitRunnable {
     }
 
     /* Internal */
-    protected void setState(@NotNull GameState gameState) {
+    protected void setState(
+            @NotNull GameState gameState
+    ) {
 
         this.arena.setGameState(gameState);
 
@@ -417,7 +419,9 @@ public class ArenaServiceRunnable extends BukkitRunnable {
                         });
     }
 
-    protected String rolePrefix(@NotNull Role role) {
+    protected String rolePrefix(
+            @NotNull Role role
+    ) {
         return switch (role) {
 
             case RUNNER ->

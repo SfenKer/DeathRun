@@ -7,9 +7,9 @@ import pl.mrstudios.deathrun.api.arena.booster.enums.Direction;
 
 public interface IBooster {
 
-    int slot();
-    float power();
-    int delay();
+    @NotNull Integer slot();
+    @NotNull Float power();
+    @NotNull Integer delay();
     @NotNull IBoosterItem item();
     @NotNull IBoosterItem delayItem();
     @NotNull Direction direction();

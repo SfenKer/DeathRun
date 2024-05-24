@@ -16,17 +16,23 @@ public class ArenaWorldListener implements Listener {
     public ArenaWorldListener() {}
 
     @EventHandler(priority = MONITOR)
-    public void onArenaWorldLoad(@NotNull WorldLoadEvent event) {
+    public void onArenaWorldLoad(
+            @NotNull WorldLoadEvent event
+    ) {
         event.getWorld().setAutoSave(false);
     }
 
     @EventHandler(priority = MONITOR)
-    public void onWorldUnload(@NotNull WorldUnloadEvent event) {
+    public void onWorldUnload(
+            @NotNull WorldUnloadEvent event
+    ) {
         event.getWorld().setAutoSave(false);
     }
 
     @EventHandler(priority = MONITOR)
-    public void onWorldSave(@NotNull WorldSaveEvent event) {
+    public void onWorldSave(
+            @NotNull WorldSaveEvent event
+    ) {
         event.getWorld().setAutoSave(false);
     }
 

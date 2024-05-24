@@ -13,6 +13,7 @@ import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -182,9 +183,9 @@ public class CommandDeathRun {
             @Context Player player,
             @Arg("type") String type
     ) throws Exception {
-        this.addTrap(player, type, null);
+        this.trap(player, type, (Object) null);
     }
-    
+
     @Execute(name = "setup addtrap")
     @Permission("mrstudios.command.deathrun.setup")
     public void addTrap(
@@ -193,6 +194,28 @@ public class CommandDeathRun {
             @Arg("material") Material material
     ) throws Exception {
         this.trap(player, type, material);
+    }
+
+    @Execute(name = "setup addtrap")
+    @Permission("mrstudios.command.deathrun.setup")
+    public void addTrap(
+            @Context Player player,
+            @Arg("type") String type,
+            @Arg("particle") Particle particle
+    ) throws Exception {
+        this.trap(player, type, particle, 5, 0.25);
+    }
+
+    @Execute(name = "setup addtrap")
+    @Permission("mrstudios.command.deathrun.setup")
+    public void addTrap(
+            @Context Player player,
+            @Arg("type") String type,
+            @Arg("particle") Particle particle,
+            @Arg("count") int count,
+            @Arg("offset") double offset
+    ) throws Exception {
+        this.trap(player, type, particle, count, offset);
     }
 
     @Execute(name = "setup setname")

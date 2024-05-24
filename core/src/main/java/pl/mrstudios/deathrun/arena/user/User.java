@@ -63,7 +63,9 @@ public class User implements IUser {
     }
 
     @Override
-    public void setCheckpoint(@NotNull ICheckpoint checkpoint) {
+    public void setCheckpoint(
+            @NotNull ICheckpoint checkpoint
+    ) {
         this.checkpoint = checkpoint;
     }
 

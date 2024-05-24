@@ -14,7 +14,9 @@ public class ArenaProjectileListener implements Listener {
     public ArenaProjectileListener() {}
 
     @EventHandler(priority = MONITOR)
-    public void onProjectileLand(@NotNull ProjectileHitEvent event) {
+    public void onProjectileLand(
+            @NotNull ProjectileHitEvent event
+    ) {
         event.getEntity().remove();
     }
 

@@ -24,14 +24,6 @@ public class TrapAppearingBlocks extends Trap {
     /* Data */
     protected final Map<Location, BlockData> backup = new HashMap<>();
 
-    public @NotNull Material getMaterial() {
-        return this.material;
-    }
-
-    public void setMaterial(@NotNull Material material) {
-        this.material = material;
-    }
-
     @Override
     public void start() {
         super.locations.forEach((location) -> this.backup.put(location, location.getBlock().getBlockData()));
@@ -45,40 +37,35 @@ public class TrapAppearingBlocks extends Trap {
     }
 
     @Override
-    public @NotNull Location getButton() {
-        return super.button;
-    }
-
-    @Override
-    public void setButton(@NotNull Location location) {
-        super.button = location;
-    }
-
-    @Override
-    public @NotNull List<Location> getLocations() {
-        return super.locations;
-    }
-
-    @Override
-    public void setLocations(@NotNull List<Location> locations) {
-        super.locations = locations;
-    }
-
-    @Override
-    public void setExtra(@Nullable Object... objects) {
+    public void setExtra(
+            @Nullable Object... objects
+    ) {
         ofNullable(objects)
                 .filter((array) -> array.length > 0)
                 .ifPresent((array) -> this.material = (Material) array[0]);
     }
 
     @Override
-    public @NotNull List<Location> filter(@NotNull List<Location> list, @Nullable Object... objects) {
+    public @NotNull List<Location> filter(
+            @NotNull List<Location> list,
+            @Nullable Object... objects
+    ) {
         return list;
     }
 
     @Override
     public @NotNull Duration getDuration() {
         return ofSeconds(3);
+    }
+
+    public @NotNull Material getMaterial() {
+        return this.material;
+    }
+
+    public void setMaterial(
+            @NotNull Material material
+    ) {
+        this.material = material;
     }
 
 }
