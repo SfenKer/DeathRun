@@ -41,6 +41,7 @@ import static dev.rollczi.litecommands.schematic.SchematicFormat.angleBrackets;
 import static java.lang.System.currentTimeMillis;
 import static java.util.Arrays.asList;
 import static java.util.Arrays.stream;
+import static pl.mrstudios.deathrun.api.API.apiInstance;
 import static pl.mrstudios.deathrun.api.API.createInstance;
 
 @SuppressWarnings("all")
@@ -48,7 +49,7 @@ public class Bootstrap extends JavaPlugin {
 
     private Arena arena;
     private TrapRegistry trapRegistry;
-    
+
     private MiniMessage miniMessage;
     private BukkitAudiences audiences;
     private BungeeComponentSerializer bungeeComponentSerializer;
@@ -173,6 +174,27 @@ public class Bootstrap extends JavaPlugin {
         /* Register Channel */
         if (!this.configuration.map().arenaSetupEnabled)
             this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
+
+        /* Check Branch */
+        if (!apiInstance().pluginGitBranch().equals("ver/latest"))
+            this.getLogger().warning(
+                    """
+                         
+                         --------------------------------------------------------
+                         
+                                       DEVELOPMENT BUILD DETECTED
+                                        
+                          You are running on a development build of the plugin,
+                          which may contain bugs and other issues. Please report
+                          any bugs you found on our GitHub repository.
+                          
+                          Version: {version}
+                          Current Branch: {branch}
+                         
+                         --------------------------------------------------------
+                         """.replace("{version}", apiInstance().pluginVersion())
+                            .replace("{branch}", apiInstance().pluginGitBranch())
+            );
 
     }
 
