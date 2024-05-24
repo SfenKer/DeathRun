@@ -26,7 +26,9 @@ public class ArenaTeleportPadListener implements Listener {
     }
 
     @EventHandler(priority = MONITOR)
-    public void onPlayerEnterPlate(@NotNull PlayerInteractEvent event) {
+    public void onPlayerEnterPlate(
+            @NotNull PlayerInteractEvent event
+    ) {
 
         if (event.getAction() != PHYSICAL)
             return;

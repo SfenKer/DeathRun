@@ -24,7 +24,9 @@ public class ArenaPlayerJoinKickListener implements Listener {
     }
 
     @EventHandler(priority = MONITOR)
-    public void onPlayerKick(PlayerLoginEvent event) {
+    public void onPlayerKick(
+            @NotNull PlayerLoginEvent event
+    ) {
 
         if (event.getResult() == KICK_FULL)
             if (event.getPlayer().hasPermission("mrstudios.deathrun.admin"))
@@ -34,7 +36,9 @@ public class ArenaPlayerJoinKickListener implements Listener {
 
     @Deprecated
     @EventHandler(priority = MONITOR)
-    public void onPlayerLogin(PlayerLoginEvent event) {
+    public void onPlayerLogin(
+            @NotNull PlayerLoginEvent event
+    ) {
 
         if (this.arena.getGameState() != WAITING && this.arena.getGameState() != STARTING)
             event.disallow(KICK_FULL, "");

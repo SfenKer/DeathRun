@@ -40,14 +40,19 @@ public class TrapDisappearingBlocks extends Trap {
     }
 
     @Override
-    public void setExtra(@Nullable Object... objects) {
+    public void setExtra(
+            @Nullable Object... objects
+    ) {
         ofNullable(objects)
                 .filter((array) -> array.length > 0)
                 .ifPresent((array) -> this.material = (Material) array[0]);
     }
 
     @Override
-    public @NotNull List<Location> filter(@NotNull List<Location> list, @Nullable Object... objects) {
+    public @NotNull List<Location> filter(
+            @NotNull List<Location> list,
+            @Nullable Object... objects
+    ) {
         return ofNullable(objects)
                 .filter((array) -> array.length > 0)
                 .map((array) -> (Material) array[0])
@@ -66,8 +71,10 @@ public class TrapDisappearingBlocks extends Trap {
     public @NotNull Material getMaterial() {
         return this.material;
     }
-    
-    public void setMaterial(@NotNull Material material) {
+
+    public void setMaterial(
+            @NotNull Material material
+    ) {
         this.material = material;
     }
 

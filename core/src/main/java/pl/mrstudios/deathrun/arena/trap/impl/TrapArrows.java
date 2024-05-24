@@ -39,10 +39,15 @@ public class TrapArrows extends Trap {
     public void end() {}
 
     @Override
-    public void setExtra(Object... objects) {}
+    public void setExtra(
+            @Nullable Object... objects
+    ) {}
 
     @Override
-    public @NotNull List<Location> filter(@NotNull List<Location> list, @Nullable Object... objects) {
+    public @NotNull List<Location> filter(
+            @NotNull List<Location> list,
+            @Nullable Object... objects
+    ) {
         return list.stream()
                 .filter((location) -> location.getBlock().getType() == DISPENSER)
                 .toList();

@@ -12,7 +12,9 @@ public class ArenaEntityExplodeListener implements Listener {
     public ArenaEntityExplodeListener() {}
 
     @EventHandler
-    public void onEntityExplode(@NotNull EntityExplodeEvent event) {
+    public void onEntityExplode(
+            @NotNull EntityExplodeEvent event
+    ) {
         event.blockList().clear();
     }
 

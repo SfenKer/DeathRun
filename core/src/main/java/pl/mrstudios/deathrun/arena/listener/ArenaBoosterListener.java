@@ -54,7 +54,9 @@ public class ArenaBoosterListener implements Listener {
     }
 
     @EventHandler(priority = MONITOR)
-    public void onItemUse(PlayerInteractEvent event) {
+    public void onItemUse(
+            @NotNull PlayerInteractEvent event
+    ) {
 
         if (event.getAction() == PHYSICAL)
             return;
@@ -136,7 +138,10 @@ public class ArenaBoosterListener implements Listener {
 
     }
 
-    protected void boost(Player player, IBooster booster) {
+    protected void boost(
+            @NotNull Player player,
+            @NotNull IBooster booster
+    ) {
 
         switch (booster.direction()) {
 

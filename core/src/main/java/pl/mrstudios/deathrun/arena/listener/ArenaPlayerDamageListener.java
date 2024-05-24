@@ -55,7 +55,9 @@ public class ArenaPlayerDamageListener implements Listener {
     }
 
     @EventHandler(priority = MONITOR)
-    public void onDamage(@NotNull EntityDamageEvent event) {
+    public void onDamage(
+            @NotNull EntityDamageEvent event
+    ) {
 
         if (!(event.getEntity() instanceof Player player))
             return;
@@ -83,7 +85,9 @@ public class ArenaPlayerDamageListener implements Listener {
     }
 
     @EventHandler(priority = MONITOR)
-    public void onPlayerMove(@NotNull PlayerMoveEvent event) {
+    public void onPlayerMove(
+            @NotNull PlayerMoveEvent event
+    ) {
 
         if (
                 event.getFrom().getBlockX() == event.getTo().getBlockX()
@@ -106,7 +110,9 @@ public class ArenaPlayerDamageListener implements Listener {
     }
 
     @EventHandler(priority = MONITOR)
-    public void onEntityExplode(@NotNull EntityExplodeEvent event) {
+    public void onEntityExplode(
+            @NotNull EntityExplodeEvent event
+    ) {
 
         if (this.arena.getGameState() != PLAYING)
             return;
@@ -117,7 +123,9 @@ public class ArenaPlayerDamageListener implements Listener {
     }
 
     @EventHandler(priority = MONITOR)
-    public void onCombust(@NotNull EntityCombustEvent event) {
+    public void onCombust(
+            @NotNull EntityCombustEvent event
+    ) {
         event.setCancelled(true);
     }
 

@@ -22,7 +22,9 @@ public class ArenaBlockEffectListener implements Listener {
     }
 
     @EventHandler(priority = MONITOR)
-    public void onStepOnBlockEffect(@NotNull PlayerMoveEvent event) {
+    public void onStepOnBlockEffect(
+            @NotNull PlayerMoveEvent event
+    ) {
 
         if (
                 event.getFrom().getBlockX() == event.getTo().getBlockX()

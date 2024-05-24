@@ -12,6 +12,7 @@ import pl.mrstudios.deathrun.api.arena.event.arena.ArenaUserLeftEvent;
 import pl.mrstudios.deathrun.arena.Arena;
 import pl.mrstudios.deathrun.config.Configuration;
 
+import static java.lang.String.valueOf;
 import static java.util.Objects.requireNonNull;
 import static java.util.Optional.ofNullable;
 import static org.bukkit.event.EventPriority.MONITOR;
@@ -43,7 +44,9 @@ public class ArenaPlayerQuitListener implements Listener {
 
     @SuppressWarnings("deprecation")
     @EventHandler(priority = MONITOR)
-    public void onPlayerQuit(@NotNull PlayerQuitEvent event) {
+    public void onPlayerQuit(
+            @NotNull PlayerQuitEvent event
+    ) {
 
         event.setQuitMessage("");
         if (this.arena.getUser(event.getPlayer()) == null)
@@ -60,8 +63,8 @@ public class ArenaPlayerQuitListener implements Listener {
                             this.audiences.player(requireNonNull(target.asBukkit())).sendMessage(this.miniMessage.deserialize(
                                     this.configuration.language().chatMessageArenaPlayerLeft
                                             .replace("<player>", event.getPlayer().getDisplayName())
-                                            .replace("<currentPlayers>", String.valueOf(this.arena.getUsers().size()))
-                                            .replace("<maxPlayers>", String.valueOf(this.configuration.map().arenaRunnerSpawnLocations.size() + this.configuration.map().arenaDeathSpawnLocations.size()))
+                                            .replace("<currentPlayers>", valueOf(this.arena.getUsers().size()))
+                                            .replace("<maxPlayers>", valueOf(this.configuration.map().arenaRunnerSpawnLocations.size() + this.configuration.map().arenaDeathSpawnLocations.size()))
                             )));
 
                     this.arena.getSidebar().removeViewer(event.getPlayer());

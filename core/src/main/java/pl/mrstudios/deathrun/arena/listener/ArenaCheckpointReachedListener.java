@@ -59,7 +59,9 @@ public class ArenaCheckpointReachedListener implements Listener {
 
     @SuppressWarnings("deprecation")
     @EventHandler(priority = MONITOR)
-    public void onPlayerMove(@NotNull PlayerMoveEvent event) {
+    public void onPlayerMove(
+            @NotNull PlayerMoveEvent event
+    ) {
 
         if (event.getTo().getBlock().getType() != NETHER_PORTAL)
             return;
@@ -104,7 +106,7 @@ public class ArenaCheckpointReachedListener implements Listener {
                                     );
 
                                     event.getPlayer().playSound(event.getPlayer().getLocation(), this.configuration.plugin().arenaSoundCheckpointReached, 1, 1);
-                                    if (checkpoint.id() != this.configuration.map().arenaCheckpoints.get(this.configuration.map().arenaCheckpoints.size() - 1).id())
+                                    if (!checkpoint.id().equals(this.configuration.map().arenaCheckpoints.get(this.configuration.map().arenaCheckpoints.size() - 1).id()))
                                         return;
 
                                     this.arena.setFinishedRuns(this.arena.getFinishedRuns() + 1);

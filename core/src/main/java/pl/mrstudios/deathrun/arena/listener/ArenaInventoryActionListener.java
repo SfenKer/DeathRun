@@ -19,7 +19,9 @@ public class ArenaInventoryActionListener implements Listener {
     public ArenaInventoryActionListener() {}
 
     @EventHandler(priority = MONITOR)
-    public void onInventoryClick(@NotNull InventoryClickEvent event) {
+    public void onInventoryClick(
+            @NotNull InventoryClickEvent event
+    ) {
 
         if (event.getClickedInventory() == null)
             return;
@@ -32,22 +34,30 @@ public class ArenaInventoryActionListener implements Listener {
     }
 
     @EventHandler(priority = MONITOR)
-    public void onItemDrop(PlayerDropItemEvent event) {
+    public void onItemDrop(
+            @NotNull PlayerDropItemEvent event
+    ) {
         event.setCancelled(true);
     }
 
     @EventHandler(priority = MONITOR)
-    public void onPlayerItemSwap(PlayerSwapHandItemsEvent event) {
+    public void onPlayerItemSwap(
+            @NotNull PlayerSwapHandItemsEvent event
+    ) {
         event.setCancelled(true);
     }
 
     @EventHandler(priority = MONITOR)
-    public void onPlayerArrowPickup(PlayerPickupArrowEvent event) {
+    public void onPlayerArrowPickup(
+            @NotNull PlayerPickupArrowEvent event
+    ) {
         event.setCancelled(true);
     }
 
     @EventHandler(priority = MONITOR)
-    public void onPlayerItemPickup(PlayerAttemptPickupItemEvent event) {
+    public void onPlayerItemPickup(
+            @NotNull PlayerAttemptPickupItemEvent event
+    ) {
         event.setCancelled(true);
     }
 

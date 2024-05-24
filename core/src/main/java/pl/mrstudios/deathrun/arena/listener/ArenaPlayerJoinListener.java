@@ -6,7 +6,6 @@ import org.bukkit.Server;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.potion.PotionEffect;
 import org.jetbrains.annotations.NotNull;
 import pl.mrstudios.commons.bukkit.item.ItemBuilder;
@@ -17,10 +16,12 @@ import pl.mrstudios.deathrun.arena.user.User;
 import pl.mrstudios.deathrun.config.Configuration;
 
 import static java.lang.Integer.MAX_VALUE;
+import static java.lang.String.valueOf;
 import static java.util.Objects.requireNonNull;
 import static org.bukkit.GameMode.ADVENTURE;
 import static org.bukkit.Material.RED_BED;
 import static org.bukkit.event.EventPriority.MONITOR;
+import static org.bukkit.inventory.ItemFlag.values;
 import static org.bukkit.potion.PotionEffectType.NIGHT_VISION;
 import static org.bukkit.potion.PotionEffectType.SATURATION;
 import static pl.mrstudios.deathrun.api.arena.enums.GameState.STARTING;
@@ -51,7 +52,9 @@ public class ArenaPlayerJoinListener implements Listener {
 
     @SuppressWarnings("deprecation")
     @EventHandler(priority = MONITOR)
-    public void onPlayerJoin(@NotNull PlayerJoinEvent event) {
+    public void onPlayerJoin(
+            @NotNull PlayerJoinEvent event
+    ) {
 
         event.setJoinMessage("");
         if (this.arena.getGameState() != WAITING && this.arena.getGameState() != STARTING)
@@ -67,8 +70,8 @@ public class ArenaPlayerJoinListener implements Listener {
                 this.audiences.player(requireNonNull(target.asBukkit())).sendMessage(this.miniMessage.deserialize(
                         this.configuration.language().chatMessageArenaPlayerJoined
                                 .replace("<player>", event.getPlayer().getDisplayName())
-                                .replace("<currentPlayers>", String.valueOf(this.arena.getUsers().size()))
-                                .replace("<maxPlayers>", String.valueOf(this.configuration.map().arenaRunnerSpawnLocations.size() + this.configuration.map().arenaDeathSpawnLocations.size()))
+                                .replace("<currentPlayers>", valueOf(this.arena.getUsers().size()))
+                                .replace("<maxPlayers>", valueOf(this.configuration.map().arenaRunnerSpawnLocations.size() + this.configuration.map().arenaDeathSpawnLocations.size()))
                 )));
 
         event.getPlayer().getActivePotionEffects()
@@ -88,7 +91,7 @@ public class ArenaPlayerJoinListener implements Listener {
         event.getPlayer().getInventory().setItem(
                 8, new ItemBuilder(RED_BED)
                         .name(this.miniMessage.deserialize(this.configuration.language().arenaItemLeaveName))
-                        .itemFlags(ItemFlag.values())
+                        .itemFlags(values())
                         .build()
         );
 
