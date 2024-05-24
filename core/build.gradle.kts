@@ -93,10 +93,6 @@ tasks {
 
     jar {
         dependsOn(shadowJar)
-        manifest {
-            attributes["Git-Branch"] = versionDetails().branchName
-            attributes["Git-Commit"] = versionDetails().gitHashFull
-        }
     }
 
     shadowJar {

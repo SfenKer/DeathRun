@@ -49,13 +49,6 @@ tasks {
         options.encoding = "UTF-8"
     }
 
-    jar {
-        manifest {
-            attributes["Git-Branch"] = versionDetails().branchName
-            attributes["Git-Commit"] = versionDetails().gitHashFull
-        }
-    }
-
     shadowJar {
         archiveFileName.set("${project.parent?.name}-${project.name}-${project.version}.jar")
     }
