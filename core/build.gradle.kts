@@ -39,37 +39,37 @@ repositories {
 
 dependencies {
 
-    shadow(project(":api"))
+    implementation(project(":api"))
 
     /* Minecraft */
     compileOnly("com.destroystokyo.paper:paper-api:${project.parent?.property("minecraft.version")}")
 
     /* Lite Commands */
-    shadow("dev.rollczi:litecommands-core:${project.parent?.property("litecommands.version")}")
-    shadow("dev.rollczi:litecommands-bukkit:${project.parent?.property("litecommands.version")}")
+    implementation("dev.rollczi:litecommands-core:${project.parent?.property("litecommands.version")}")
+    implementation("dev.rollczi:litecommands-bukkit:${project.parent?.property("litecommands.version")}")
 
     /* Okaeri Configs */
-    shadow("eu.okaeri:okaeri-configs-yaml-bukkit:${project.parent?.property("okaeri.configs.version")}")
-    shadow("eu.okaeri:okaeri-configs-serdes-bukkit:${project.parent?.property("okaeri.configs.version")}")
+    implementation("eu.okaeri:okaeri-configs-yaml-bukkit:${project.parent?.property("okaeri.configs.version")}")
+    implementation("eu.okaeri:okaeri-configs-serdes-bukkit:${project.parent?.property("okaeri.configs.version")}")
 
     /* Commons */
-    shadow("pl.mrstudios.commons:commons-bukkit:${project.parent?.property("mrstudios.commons.version")}")
-    shadow("pl.mrstudios.commons:commons-inject:${project.parent?.property("mrstudios.commons.version")}")
-    shadow("pl.mrstudios.commons:commons-reflection:${project.parent?.property("mrstudios.commons.version")}")
+    implementation("pl.mrstudios.commons:commons-bukkit:${project.parent?.property("mrstudios.commons.version")}")
+    implementation("pl.mrstudios.commons:commons-inject:${project.parent?.property("mrstudios.commons.version")}")
+    implementation("pl.mrstudios.commons:commons-reflection:${project.parent?.property("mrstudios.commons.version")}")
 
     /* Kyori Adventure */
-    shadow("net.kyori:adventure-api:${project.parent?.property("kyori.adventure.version")}")
-    shadow("net.kyori:adventure-text-minimessage:${project.parent?.property("kyori.adventure.version")}")
+    implementation("net.kyori:adventure-api:${project.parent?.property("kyori.adventure.version")}")
+    implementation("net.kyori:adventure-text-minimessage:${project.parent?.property("kyori.adventure.version")}")
 
     /* Kyori Adventure Platform */
-    shadow("net.kyori:adventure-platform-bukkit:${project.parent?.property("kyori.adventure.platform.version")}")
-    shadow("net.kyori:adventure-text-serializer-bungeecord:${project.parent?.property("kyori.adventure.platform.version")}")
+    implementation("net.kyori:adventure-platform-bukkit:${project.parent?.property("kyori.adventure.platform.version")}")
+    implementation("net.kyori:adventure-text-serializer-bungeecord:${project.parent?.property("kyori.adventure.platform.version")}")
 
     /* Apache Commons IO */
-    shadow("commons-io:commons-io:${project.parent?.property("apache.commons.io.version")}")
+    implementation("commons-io:commons-io:${project.parent?.property("apache.commons.io.version")}")
 
     /* Protocol Sidebar */
-    shadow("me.catcoder:bukkit-sidebar:${project.parent?.property("protocol.sidebar.version")}")
+    implementation("me.catcoder:bukkit-sidebar:${project.parent?.property("protocol.sidebar.version")}")
 
     /* WorldEdit */
     compileOnly("com.sk89q.worldedit:worldedit-bukkit:${project.parent?.property("worldedit.version")}")
@@ -97,7 +97,6 @@ tasks {
 
     shadowJar {
 
-        configurations = listOf(project.configurations.shadow.get())
         archiveFileName.set("${project.parent?.name}-${project.name}-${project.version}.jar")
 
         exclude("META-INF/**")
