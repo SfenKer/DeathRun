@@ -10,7 +10,6 @@ import dev.rollczi.litecommands.annotations.context.Context;
 import dev.rollczi.litecommands.annotations.execute.Execute;
 import dev.rollczi.litecommands.annotations.permission.Permission;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.lingala.zip4j.ZipFile;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -40,6 +39,7 @@ import static java.nio.file.Files.createFile;
 import static java.nio.file.Paths.get;
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Stream.of;
+import static net.kyori.adventure.text.minimessage.MiniMessage.miniMessage;
 import static org.bukkit.Material.*;
 import static pl.mrstudios.deathrun.api.arena.user.enums.Role.DEATH;
 import static pl.mrstudios.deathrun.api.arena.user.enums.Role.RUNNER;
@@ -55,7 +55,6 @@ public class CommandDeathRun {
     private final Plugin plugin;
     private final WorldEdit worldEdit;
 
-    private final MiniMessage miniMessage;
     private final BukkitAudiences audiences;
 
     private final TrapRegistry  trapRegistry;
@@ -66,14 +65,12 @@ public class CommandDeathRun {
             @NotNull Plugin plugin,
             @NotNull WorldEdit worldEdit,
             @NotNull BukkitAudiences audiences,
-            @NotNull MiniMessage miniMessage,
             @NotNull TrapRegistry  trapRegistry,
             @NotNull Configuration configuration
     ) {
         this.plugin = plugin;
         this.worldEdit = worldEdit;
         this.audiences = audiences;
-        this.miniMessage = miniMessage;
         this.trapRegistry = trapRegistry;
         this.configuration = configuration;
     }
@@ -109,7 +106,7 @@ public class CommandDeathRun {
     ) {
 
         if (!this.configuration.map().arenaSetupEnabled) {
-            this.audiences.player(player).sendMessage(this.miniMessage.deserialize("<reset> <dark_red><b>*</b> <red>You can't use that command while setup is disabled."));
+            this.audiences.player(player).sendMessage(miniMessage().deserialize("<reset> <dark_red><b>*</b> <red>You can't use that command while setup is disabled."));
             return;
         }
 
@@ -136,7 +133,7 @@ public class CommandDeathRun {
     ) {
 
         if (!this.configuration.map().arenaSetupEnabled) {
-            this.audiences.player(player).sendMessage(this.miniMessage.deserialize("<reset> <dark_red><b>*</b> <red>You can't use that command while setup is disabled."));
+            this.audiences.player(player).sendMessage(miniMessage().deserialize("<reset> <dark_red><b>*</b> <red>You can't use that command while setup is disabled."));
             return;
         }
 
@@ -156,7 +153,7 @@ public class CommandDeathRun {
     ) {
 
         if (!this.configuration.map().arenaSetupEnabled) {
-            this.audiences.player(player).sendMessage(this.miniMessage.deserialize("<reset> <dark_red><b>*</b> <red>You can't use that command while setup is disabled."));
+            this.audiences.player(player).sendMessage(miniMessage().deserialize("<reset> <dark_red><b>*</b> <red>You can't use that command while setup is disabled."));
             return;
         }
 
@@ -229,7 +226,7 @@ public class CommandDeathRun {
     ) {
 
         if (!this.configuration.map().arenaSetupEnabled) {
-            this.audiences.player(player).sendMessage(this.miniMessage.deserialize("<reset> <dark_red><b>*</b> <red>You can't use that command while setup is disabled."));
+            this.audiences.player(player).sendMessage(miniMessage().deserialize("<reset> <dark_red><b>*</b> <red>You can't use that command while setup is disabled."));
             return;
         }
 
@@ -254,7 +251,7 @@ public class CommandDeathRun {
     ) {
 
         if (!this.configuration.map().arenaSetupEnabled) {
-            this.audiences.player(player).sendMessage(this.miniMessage.deserialize("<reset> <dark_red><b>*</b> <red>You can't use that command while setup is disabled."));
+            this.audiences.player(player).sendMessage(miniMessage().deserialize("<reset> <dark_red><b>*</b> <red>You can't use that command while setup is disabled."));
             return;
         }
 
@@ -275,7 +272,7 @@ public class CommandDeathRun {
     ) {
 
         if (!this.configuration.map().arenaSetupEnabled) {
-            this.audiences.player(player).sendMessage(this.miniMessage.deserialize("<reset> <dark_red><b>*</b> <red>You can't use that command while setup is disabled."));
+            this.audiences.player(player).sendMessage(miniMessage().deserialize("<reset> <dark_red><b>*</b> <red>You can't use that command while setup is disabled."));
             return;
         }
 
@@ -291,7 +288,7 @@ public class CommandDeathRun {
     ) {
 
         if (!this.configuration.map().arenaSetupEnabled) {
-            this.audiences.player(player).sendMessage(this.miniMessage.deserialize("<reset> <dark_red><b>*</b> <red>You can't use that command while setup is disabled."));
+            this.audiences.player(player).sendMessage(miniMessage().deserialize("<reset> <dark_red><b>*</b> <red>You can't use that command while setup is disabled."));
             return;
         }
 
@@ -307,7 +304,7 @@ public class CommandDeathRun {
     ) {
 
         if (!this.configuration.map().arenaSetupEnabled) {
-            this.audiences.player(player).sendMessage(this.miniMessage.deserialize("<reset> <dark_red><b>*</b> <red>You can't use that command while setup is disabled."));
+            this.audiences.player(player).sendMessage(miniMessage().deserialize("<reset> <dark_red><b>*</b> <red>You can't use that command while setup is disabled."));
             return;
         }
 
@@ -335,7 +332,7 @@ public class CommandDeathRun {
             @NotNull Player player, String message,
             @Nullable Object... args
     ) {
-        this.audiences.player(player).sendMessage(this.miniMessage.deserialize(format(message, args)));
+        this.audiences.player(player).sendMessage(miniMessage().deserialize(format(message, args)));
     }
 
     protected List<Location> locations(@NotNull Player player) {
@@ -366,7 +363,7 @@ public class CommandDeathRun {
     ) throws Exception {
 
         if (!this.configuration.map().arenaSetupEnabled) {
-            this.audiences.player(player).sendMessage(this.miniMessage.deserialize("<reset> <dark_red><b>*</b> <red>You can't use that command while setup is disabled."));
+            this.audiences.player(player).sendMessage(miniMessage().deserialize("<reset> <dark_red><b>*</b> <red>You can't use that command while setup is disabled."));
             return;
         }
 

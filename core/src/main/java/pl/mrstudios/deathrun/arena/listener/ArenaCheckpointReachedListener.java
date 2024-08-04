@@ -1,7 +1,6 @@
 package pl.mrstudios.deathrun.arena.listener;
 
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Server;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -21,6 +20,7 @@ import java.util.Objects;
 import static java.time.Duration.ofMillis;
 import static java.time.Duration.ofSeconds;
 import static java.util.Optional.ofNullable;
+import static net.kyori.adventure.text.minimessage.MiniMessage.miniMessage;
 import static net.kyori.adventure.title.Title.Times.of;
 import static net.kyori.adventure.title.Title.title;
 import static org.bukkit.GameMode.ADVENTURE;
@@ -36,7 +36,6 @@ public class ArenaCheckpointReachedListener implements Listener {
     private final Arena arena;
     private final Plugin plugin;
     private final Server server;
-    private final MiniMessage miniMessage;
     private final BukkitAudiences audiences;
     private final Configuration configuration;
 
@@ -45,7 +44,6 @@ public class ArenaCheckpointReachedListener implements Listener {
             @NotNull Arena arena,
             @NotNull Plugin plugin,
             @NotNull Server server,
-            @NotNull MiniMessage miniMessage,
             @NotNull BukkitAudiences audiences,
             @NotNull Configuration configuration
     ) {
@@ -53,7 +51,6 @@ public class ArenaCheckpointReachedListener implements Listener {
         this.plugin = plugin;
         this.server = server;
         this.audiences = audiences;
-        this.miniMessage = miniMessage;
         this.configuration = configuration;
     }
 
@@ -93,11 +90,11 @@ public class ArenaCheckpointReachedListener implements Listener {
                                     user.setCheckpoint(checkpoint);
                                     this.audiences.player(event.getPlayer()).showTitle(
                                             title(
-                                                    this.miniMessage.deserialize(
+                                                    miniMessage().deserialize(
                                                             this.configuration.language().arenaCheckpointTitle
                                                                     .replace("<checkpoint>", String.valueOf(checkpoint.id()))
                                                     ),
-                                                    this.miniMessage.deserialize(
+                                                    miniMessage().deserialize(
                                                             this.configuration.language().arenaCheckpointSubtitle
                                                                     .replace("<checkpoint>", String.valueOf(checkpoint.id()))
                                                     ),
@@ -122,12 +119,12 @@ public class ArenaCheckpointReachedListener implements Listener {
 
                                     this.audiences.player(event.getPlayer()).showTitle(
                                             title(
-                                                    this.miniMessage.deserialize(
+                                                    miniMessage().deserialize(
                                                             this.configuration.language().arenaFinishTitle
                                                                     .replace("<position>", String.valueOf(position))
                                                                     .replace("<seconds>", String.valueOf(time))
                                                     ),
-                                                    this.miniMessage.deserialize(
+                                                    miniMessage().deserialize(
                                                             this.configuration.language().arenaFinishSubtitle
                                                                     .replace("<position>", String.valueOf(position))
                                                                     .replace("<seconds>", String.valueOf(time))
@@ -141,7 +138,7 @@ public class ArenaCheckpointReachedListener implements Listener {
                                     this.arena.getUsers().stream()
                                             .map(IUser::asBukkit)
                                             .filter(Objects::nonNull)
-                                            .forEach((target) -> this.audiences.player(target).sendMessage(this.miniMessage.deserialize(
+                                            .forEach((target) -> this.audiences.player(target).sendMessage(miniMessage().deserialize(
                                                     this.configuration.language().chatMessageArenaPlayerFinished
                                                             .replace("<player>", event.getPlayer().getDisplayName())
                                                             .replace("<seconds>", String.valueOf(time))
@@ -149,7 +146,7 @@ public class ArenaCheckpointReachedListener implements Listener {
                                             )));
 
                                     this.configuration.language().chatMessageGameEndSpectator.stream()
-                                            .map(this.miniMessage::deserialize)
+                                            .map(miniMessage()::deserialize)
                                             .forEach((component) -> this.audiences.player(event.getPlayer()).sendMessage(component));
 
                                     event.getPlayer().setAllowFlight(true);
@@ -163,7 +160,7 @@ public class ArenaCheckpointReachedListener implements Listener {
                                     event.getPlayer().getInventory().clear();
                                     event.getPlayer().getInventory().setItem(
                                             8, new ItemBuilder(RED_BED)
-                                                    .name(this.miniMessage.deserialize(this.configuration.language().arenaItemLeaveName))
+                                                    .name(miniMessage().deserialize(this.configuration.language().arenaItemLeaveName))
                                                     .itemFlags(values())
                                                     .build()
                                     );

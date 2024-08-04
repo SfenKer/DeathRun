@@ -2,7 +2,6 @@ package pl.mrstudios.deathrun.arena;
 
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
@@ -34,6 +33,7 @@ import static java.util.Optional.ofNullable;
 import static java.util.stream.IntStream.range;
 import static me.catcoder.sidebar.ProtocolSidebar.newAdventureSidebar;
 import static net.kyori.adventure.text.Component.empty;
+import static net.kyori.adventure.text.minimessage.MiniMessage.miniMessage;
 import static net.kyori.adventure.title.Title.Times.of;
 import static net.kyori.adventure.title.Title.title;
 import static org.bukkit.Material.AIR;
@@ -48,7 +48,6 @@ public class ArenaServiceRunnable extends BukkitRunnable {
     private final Arena arena;
     private final Plugin plugin;
     private final Server server;
-    private final MiniMessage miniMessage;
     private final BukkitAudiences audiences;
     private final Configuration configuration;
 
@@ -59,7 +58,6 @@ public class ArenaServiceRunnable extends BukkitRunnable {
             @NotNull Arena arena,
             @NotNull Plugin plugin,
             @NotNull Server server,
-            @NotNull MiniMessage miniMessage,
             @NotNull BukkitAudiences audiences,
             @NotNull Configuration configuration
     ) {
@@ -68,7 +66,6 @@ public class ArenaServiceRunnable extends BukkitRunnable {
         this.server = server;
         this.plugin = plugin;
         this.audiences = audiences;
-        this.miniMessage = miniMessage;
         this.configuration = configuration;
         this.setState(WAITING);
 
@@ -128,17 +125,17 @@ public class ArenaServiceRunnable extends BukkitRunnable {
                     .map(IUser::asBukkit).filter(Objects::nonNull)
                     .forEach((player) -> {
                         this.audiences.player(player).showTitle(title(
-                                this.miniMessage.deserialize(
+                                miniMessage().deserialize(
                                         this.configuration.language().arenaPreStartingTitle
                                                 .replace("<timer>", valueOf(this.startingTimer))
                                 ),
-                                this.miniMessage.deserialize(
+                                miniMessage().deserialize(
                                         this.configuration.language().arenaPreStartingSubtitle
                                                 .replace("<timer>", valueOf(this.startingTimer))
                                 ),
                                 of(ofMillis(250), ofMillis(1000), ofMillis(250))
                         ));
-                        this.audiences.player(player).sendMessage(this.miniMessage.deserialize(
+                        this.audiences.player(player).sendMessage(miniMessage().deserialize(
                                 this.configuration.language().chatMessageArenaStartingTimer
                                         .replace("<timer>", valueOf(this.startingTimer))
                         ));
@@ -171,10 +168,10 @@ public class ArenaServiceRunnable extends BukkitRunnable {
 
                             player.playSound(player.getLocation(), this.configuration.plugin().arenaSoundStarting, 1.0f, 1.0f);
                             this.audiences.player(player).showTitle(title(
-                                    this.miniMessage.deserialize(
+                                    miniMessage().deserialize(
                                             this.configuration.language().arenaStartingTitle
                                                     .replace("<timer>", valueOf(this.barrierTimer))),
-                                    this.miniMessage.deserialize(
+                                    miniMessage().deserialize(
                                             this.configuration.language().arenaStartingSubtitle
                                                     .replace("<timer>", valueOf(this.barrierTimer))
                                     ),
@@ -238,12 +235,12 @@ public class ArenaServiceRunnable extends BukkitRunnable {
 
                     if (user.getRole() == RUNNER)
                         this.configuration.language().chatMessageArenaGameStartRunner.stream()
-                                .map(this.miniMessage::deserialize)
+                                .map(miniMessage()::deserialize)
                                 .forEach((component) -> this.audiences.player(player).sendMessage(component));
 
                     if (user.getRole() == DEATH)
                         this.configuration.language().chatMessageArenaGameStartDeath.stream()
-                                .map(this.miniMessage::deserialize)
+                                .map(miniMessage()::deserialize)
                                 .forEach((component) -> this.audiences.player(player).sendMessage(component));
 
                     user.setCheckpoint(this.configuration.map().arenaCheckpoints.get(0));
@@ -258,7 +255,7 @@ public class ArenaServiceRunnable extends BukkitRunnable {
                                 .forEach((booster) ->
                                         player.getInventory().setItem(
                                                 booster.slot(), new ItemBuilder(booster.item().material())
-                                                        .name(this.miniMessage.deserialize(booster.item().name()))
+                                                        .name(miniMessage().deserialize(booster.item().name()))
                                                         .texture((booster.item().texture() != null) ? requireNonNull(booster.item().texture()) : "")
                                                         .itemFlags(values())
                                                         .build()
@@ -285,10 +282,10 @@ public class ArenaServiceRunnable extends BukkitRunnable {
                     .forEach(
                             (player) ->
                                     this.audiences.player(player).showTitle(title(
-                                            this.miniMessage.deserialize(
+                                            miniMessage().deserialize(
                                                     this.configuration.language().arenaMoveServerTitle
                                                             .replace("<endTimer>", valueOf(this.endDelayTimer))),
-                                            this.miniMessage.deserialize(
+                                            miniMessage().deserialize(
                                                     this.configuration.language().arenaMoveServerSubtitle
                                                             .replace("<endTimer>", valueOf(this.endDelayTimer))
                                             ),
@@ -325,8 +322,8 @@ public class ArenaServiceRunnable extends BukkitRunnable {
                 .filter(Objects::nonNull)
                 .forEach((player) ->
                         this.audiences.player(player).showTitle(title(
-                                this.miniMessage.deserialize(this.configuration.language().arenaGameEndTitle),
-                                this.miniMessage.deserialize(this.configuration.language().arenaGameEndSubtitle),
+                                miniMessage().deserialize(this.configuration.language().arenaGameEndTitle),
+                                miniMessage().deserialize(this.configuration.language().arenaGameEndSubtitle),
                                 of(ofMillis(250), ofMillis(2500), ofMillis(250))
                         ))
                 );
@@ -366,7 +363,7 @@ public class ArenaServiceRunnable extends BukkitRunnable {
         if (this.arena.getGameState() == ENDING)
             return;
 
-        this.arena.setSidebar(newAdventureSidebar(this.miniMessage.deserialize(this.configuration.language().arenaScoreboardTitle), this.plugin));
+        this.arena.setSidebar(newAdventureSidebar(miniMessage().deserialize(this.configuration.language().arenaScoreboardTitle), this.plugin));
 
         switch (this.arena.getGameState()) {
 
@@ -400,7 +397,7 @@ public class ArenaServiceRunnable extends BukkitRunnable {
 
                             ofNullable(this.arena.getUser(player))
                                     .ifPresentOrElse(
-                                            (user) -> component.set(this.miniMessage.deserialize(
+                                            (user) -> component.set(miniMessage().deserialize(
                                                     content.replace("<map>", this.configuration.map().arenaName)
                                                             .replace("<role>", this.rolePrefix(user.getRole()))
                                                             .replace("<currentPlayers>", valueOf(this.arena.getUsers().size()))

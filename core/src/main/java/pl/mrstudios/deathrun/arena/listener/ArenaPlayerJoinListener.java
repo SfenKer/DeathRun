@@ -1,7 +1,6 @@
 package pl.mrstudios.deathrun.arena.listener;
 
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Server;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -18,6 +17,7 @@ import pl.mrstudios.deathrun.config.Configuration;
 import static java.lang.Integer.MAX_VALUE;
 import static java.lang.String.valueOf;
 import static java.util.Objects.requireNonNull;
+import static net.kyori.adventure.text.minimessage.MiniMessage.miniMessage;
 import static org.bukkit.GameMode.ADVENTURE;
 import static org.bukkit.Material.RED_BED;
 import static org.bukkit.event.EventPriority.MONITOR;
@@ -31,7 +31,6 @@ public class ArenaPlayerJoinListener implements Listener {
 
     private final Arena arena;
     private final Server server;
-    private final MiniMessage miniMessage;
     private final BukkitAudiences audiences;
     private final Configuration configuration;
 
@@ -39,14 +38,12 @@ public class ArenaPlayerJoinListener implements Listener {
     public ArenaPlayerJoinListener(
             @NotNull Arena arena,
             @NotNull Server server,
-            @NotNull MiniMessage miniMessage,
             @NotNull BukkitAudiences audiences,
             @NotNull Configuration configuration
     ) {
         this.arena = arena;
         this.server = server;
         this.audiences = audiences;
-        this.miniMessage = miniMessage;
         this.configuration = configuration;
     }
 
@@ -67,7 +64,7 @@ public class ArenaPlayerJoinListener implements Listener {
 
         this.arena.getUsers().add(user);
         this.arena.getUsers().forEach((target) ->
-                this.audiences.player(requireNonNull(target.asBukkit())).sendMessage(this.miniMessage.deserialize(
+                this.audiences.player(requireNonNull(target.asBukkit())).sendMessage(miniMessage().deserialize(
                         this.configuration.language().chatMessageArenaPlayerJoined
                                 .replace("<player>", event.getPlayer().getDisplayName())
                                 .replace("<currentPlayers>", valueOf(this.arena.getUsers().size()))
@@ -90,7 +87,7 @@ public class ArenaPlayerJoinListener implements Listener {
 
         event.getPlayer().getInventory().setItem(
                 8, new ItemBuilder(RED_BED)
-                        .name(this.miniMessage.deserialize(this.configuration.language().arenaItemLeaveName))
+                        .name(miniMessage().deserialize(this.configuration.language().arenaItemLeaveName))
                         .itemFlags(values())
                         .build()
         );
