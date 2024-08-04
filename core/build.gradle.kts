@@ -69,6 +69,9 @@ dependencies {
     /* Apache Commons IO */
     implementation("commons-io:commons-io:${project.parent?.property("apache.commons.io.version")}")
 
+    /* Zip4J */
+    implementation("net.lingala.zip4j:zip4j:${project.parent?.property("zip4j.version")}")
+
     /* Protocol Sidebar */
     implementation("me.catcoder:bukkit-sidebar:${project.parent?.property("protocol.sidebar.version")}")
 

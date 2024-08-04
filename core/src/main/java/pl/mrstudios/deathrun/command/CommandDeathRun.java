@@ -11,6 +11,7 @@ import dev.rollczi.litecommands.annotations.execute.Execute;
 import dev.rollczi.litecommands.annotations.permission.Permission;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.lingala.zip4j.ZipFile;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -27,20 +28,22 @@ import pl.mrstudios.deathrun.arena.pad.TeleportPad;
 import pl.mrstudios.deathrun.arena.trap.TrapRegistry;
 import pl.mrstudios.deathrun.config.Configuration;
 
-import java.io.File;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static java.lang.String.format;
 import static java.lang.String.join;
+import static java.nio.file.Files.createDirectories;
+import static java.nio.file.Files.createFile;
+import static java.nio.file.Paths.get;
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Stream.of;
 import static org.bukkit.Material.*;
 import static pl.mrstudios.deathrun.api.arena.user.enums.Role.DEATH;
 import static pl.mrstudios.deathrun.api.arena.user.enums.Role.RUNNER;
 import static pl.mrstudios.deathrun.util.ChannelUtil.connect;
-import static pl.mrstudios.deathrun.util.ZipUtil.zip;
 
 @Command(
         name = "deathrun",
@@ -311,9 +314,18 @@ public class CommandDeathRun {
         this.configuration.map().arenaSetupEnabled = false;
         this.configuration.map().save();
 
-        zip(new File(this.plugin.getDataFolder(), "backup/" + player.getWorld().getName() + ".zip"), new Path[] {
-                player.getWorld().getWorldFolder().toPath()
-        });
+        Path path = get(this.plugin.getDataFolder().toString(), "backup/", format("%s.zip", player.getWorld().getName()));
+
+        try {
+            createDirectories(path.getParent());
+            createFile(path);
+        } catch (@NotNull Exception exception) {
+            throw new RuntimeException("Unable to save world backup due to an exception.", exception);
+        }
+
+        try (ZipFile zipFile = new ZipFile(path.toString())) {
+            zipFile.addFolder(player.getWorld().getWorldFolder());
+        } catch (@NotNull Exception ignored) {}
 
         this.message(player, "<reset> <dark_green><b>*</b> <green>Arena configuration saved successfully, please restart server to apply changes.");
 
@@ -323,7 +335,7 @@ public class CommandDeathRun {
             @NotNull Player player, String message,
             @Nullable Object... args
     ) {
-        this.audiences.player(player).sendMessage(this.miniMessage.deserialize(String.format(message, args)));
+        this.audiences.player(player).sendMessage(this.miniMessage.deserialize(format(message, args)));
     }
 
     protected List<Location> locations(@NotNull Player player) {

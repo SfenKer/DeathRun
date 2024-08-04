@@ -9,12 +9,13 @@ import dev.rollczi.litecommands.suggestion.SuggestionResult;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.bungeecord.BungeeComponentSerializer;
-import org.apache.commons.io.FileUtils;
+import net.lingala.zip4j.ZipFile;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 import pl.mrstudios.commons.inject.Injector;
 import pl.mrstudios.commons.inject.annotation.Inject;
 import pl.mrstudios.commons.reflection.Reflections;
@@ -30,17 +31,17 @@ import pl.mrstudios.deathrun.config.impl.LanguageConfiguration;
 import pl.mrstudios.deathrun.config.impl.MapConfiguration;
 import pl.mrstudios.deathrun.config.impl.PluginConfiguration;
 import pl.mrstudios.deathrun.exception.MissingDependencyException;
-import pl.mrstudios.deathrun.util.ZipUtil;
 
 import java.io.File;
 import java.util.Objects;
-import java.util.stream.Stream;
 
 import static dev.rollczi.litecommands.annotations.LiteCommandsAnnotations.of;
 import static dev.rollczi.litecommands.schematic.SchematicFormat.angleBrackets;
 import static java.lang.System.currentTimeMillis;
+import static java.nio.file.Paths.get;
 import static java.util.Arrays.asList;
 import static java.util.Arrays.stream;
+import static org.apache.commons.io.FileUtils.deleteDirectory;
 import static pl.mrstudios.deathrun.api.API.apiInstance;
 import static pl.mrstudios.deathrun.api.API.createInstance;
 
@@ -211,7 +212,7 @@ public class Bootstrap extends JavaPlugin {
 
         try {
 
-            Stream.of(new File(this.getDataFolder(), "backup").listFiles())
+            stream(new File(this.getDataFolder(), "backup").listFiles())
                     .filter((file) -> file.getName().endsWith(".zip"))
                     .forEach((file) -> {
 
@@ -220,10 +221,12 @@ public class Bootstrap extends JavaPlugin {
 
                         try {
 
-                            File worldFile = new File(file.getName().replace(".zip", ""));
-                            FileUtils.deleteDirectory(worldFile);
+                            deleteDirectory(get(file.getName().replace(".zip", "")).toFile());
 
-                            ZipUtil.unzip(file, worldFile.toPath());
+                            try (ZipFile zipFile = new ZipFile(file)) {
+                                zipFile.extractAll(get("./").toString());
+                            }
+
                             this.getLogger().info("Restoring " + file.getName().replace(".zip", "") + " world backup complete. [" + (currentTimeMillis() - startTime) + "ms]");
 
                         } catch (Exception exception) {
@@ -232,7 +235,7 @@ public class Bootstrap extends JavaPlugin {
 
                     });
 
-        } catch (Exception ignored) {}
+        } catch (@NotNull Exception ignored) {}
 
     }
 
