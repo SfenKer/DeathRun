@@ -34,7 +34,7 @@ import static java.util.stream.IntStream.range;
 import static me.catcoder.sidebar.ProtocolSidebar.newAdventureSidebar;
 import static net.kyori.adventure.text.Component.empty;
 import static net.kyori.adventure.text.minimessage.MiniMessage.miniMessage;
-import static net.kyori.adventure.title.Title.Times.of;
+import static net.kyori.adventure.title.Title.Times.times;
 import static net.kyori.adventure.title.Title.title;
 import static org.bukkit.Material.AIR;
 import static org.bukkit.inventory.ItemFlag.values;
@@ -133,7 +133,7 @@ public class ArenaServiceRunnable extends BukkitRunnable {
                                         this.configuration.language().arenaPreStartingSubtitle
                                                 .replace("<timer>", valueOf(this.startingTimer))
                                 ),
-                                of(ofMillis(250), ofMillis(1000), ofMillis(250))
+                                times(ofMillis(250), ofMillis(1000), ofMillis(250))
                         ));
                         this.audiences.player(player).sendMessage(miniMessage().deserialize(
                                 this.configuration.language().chatMessageArenaStartingTimer
@@ -175,7 +175,7 @@ public class ArenaServiceRunnable extends BukkitRunnable {
                                             this.configuration.language().arenaStartingSubtitle
                                                     .replace("<timer>", valueOf(this.barrierTimer))
                                     ),
-                                    of(ofMillis(250), ofMillis(1000), ofMillis(250))
+                                    times(ofMillis(250), ofMillis(1000), ofMillis(250))
                             ));
 
                         });
@@ -289,7 +289,7 @@ public class ArenaServiceRunnable extends BukkitRunnable {
                                                     this.configuration.language().arenaMoveServerSubtitle
                                                             .replace("<endTimer>", valueOf(this.endDelayTimer))
                                             ),
-                                            of(ofMillis(250), ofMillis(1000), ofMillis(250))
+                                            times(ofMillis(250), ofMillis(1000), ofMillis(250))
                                     ))
                     );
 
@@ -324,7 +324,7 @@ public class ArenaServiceRunnable extends BukkitRunnable {
                         this.audiences.player(player).showTitle(title(
                                 miniMessage().deserialize(this.configuration.language().arenaGameEndTitle),
                                 miniMessage().deserialize(this.configuration.language().arenaGameEndSubtitle),
-                                of(ofMillis(250), ofMillis(2500), ofMillis(250))
+                                times(ofMillis(250), ofMillis(2500), ofMillis(250))
                         ))
                 );
 

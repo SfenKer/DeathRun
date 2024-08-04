@@ -21,7 +21,7 @@ import static java.time.Duration.ofMillis;
 import static java.time.Duration.ofSeconds;
 import static java.util.Optional.ofNullable;
 import static net.kyori.adventure.text.minimessage.MiniMessage.miniMessage;
-import static net.kyori.adventure.title.Title.Times.of;
+import static net.kyori.adventure.title.Title.Times.times;
 import static net.kyori.adventure.title.Title.title;
 import static org.bukkit.GameMode.ADVENTURE;
 import static org.bukkit.Material.NETHER_PORTAL;
@@ -98,7 +98,7 @@ public class ArenaCheckpointReachedListener implements Listener {
                                                             this.configuration.language().arenaCheckpointSubtitle
                                                                     .replace("<checkpoint>", String.valueOf(checkpoint.id()))
                                                     ),
-                                                    of(ofMillis(250), ofSeconds(3), ofMillis(250))
+                                                    times(ofMillis(250), ofSeconds(3), ofMillis(250))
                                             )
                                     );
 
@@ -129,7 +129,7 @@ public class ArenaCheckpointReachedListener implements Listener {
                                                                     .replace("<position>", String.valueOf(position))
                                                                     .replace("<seconds>", String.valueOf(time))
                                                     ),
-                                                    of(ofMillis(250), ofSeconds(3), ofMillis(250))
+                                                    times(ofMillis(250), ofSeconds(3), ofMillis(250))
                                             )
                                     );
 

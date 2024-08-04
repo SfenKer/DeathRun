@@ -21,7 +21,7 @@ import static java.time.Duration.ofMillis;
 import static java.time.Duration.ofSeconds;
 import static java.util.Optional.ofNullable;
 import static net.kyori.adventure.text.minimessage.MiniMessage.miniMessage;
-import static net.kyori.adventure.title.Title.Times.of;
+import static net.kyori.adventure.title.Title.Times.times;
 import static net.kyori.adventure.title.Title.title;
 import static org.bukkit.Material.LAVA;
 import static org.bukkit.Material.WATER;
@@ -142,7 +142,7 @@ public class ArenaPlayerDamageListener implements Listener {
                 title(
                         miniMessage().deserialize(this.configuration.language().arenaDeathTitle),
                         miniMessage().deserialize(this.configuration.language().arenaDeathSubtitle),
-                        of(ofMillis(250), ofSeconds(2), ofMillis(250))
+                        times(ofMillis(250), ofSeconds(2), ofMillis(250))
                 )
         );
 
