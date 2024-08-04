@@ -30,6 +30,7 @@ blossom {
 repositories {
     mavenCentral()
     maven("https://repo.mrstudios.pl/public/")
+    maven("https://repo.mrstudios.pl/third-party/")
     maven("https://maven.enginehub.org/repo/")
     maven("https://repo.panda-lang.org/releases/")
     maven("https://repo.opencollab.dev/maven-releases/")
