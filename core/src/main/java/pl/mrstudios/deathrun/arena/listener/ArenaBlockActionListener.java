@@ -9,8 +9,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.jetbrains.annotations.NotNull;
 import pl.mrstudios.commons.inject.annotation.Inject;
 
-import java.util.Arrays;
-
+import static java.util.Arrays.stream;
 import static org.bukkit.Material.*;
 import static org.bukkit.event.EventPriority.MONITOR;
 import static org.bukkit.event.block.Action.PHYSICAL;
@@ -42,7 +41,7 @@ public class ArenaBlockActionListener implements Listener {
 
         if (event.getAction() == RIGHT_CLICK_BLOCK)
             if (event.getClickedBlock() != null)
-                if (Arrays.stream(this.materials).anyMatch((material) -> material == event.getClickedBlock().getType()))
+                if (stream(containerMaterials).anyMatch((material) -> material == event.getClickedBlock().getType()))
                     event.setCancelled(true);
 
         if (event.getAction() == PHYSICAL)
@@ -50,7 +49,7 @@ public class ArenaBlockActionListener implements Listener {
 
     }
 
-    protected final Material[] materials = {
+    protected static final Material[] containerMaterials = {
             CHEST, DISPENSER, DROPPER, FURNACE,
             HOPPER, BREWING_STAND, BEACON, ANVIL,
             CHIPPED_ANVIL, DAMAGED_ANVIL, ENCHANTING_TABLE,

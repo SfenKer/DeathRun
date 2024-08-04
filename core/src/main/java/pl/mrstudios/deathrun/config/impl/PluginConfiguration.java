@@ -1,16 +1,24 @@
 package pl.mrstudios.deathrun.config.impl;
 
 import eu.okaeri.configs.OkaeriConfig;
-import eu.okaeri.configs.annotation.*;
-import org.bukkit.Material;
+import eu.okaeri.configs.annotation.Comment;
+import eu.okaeri.configs.annotation.Header;
+import eu.okaeri.configs.annotation.Names;
 import org.bukkit.Sound;
-import org.bukkit.potion.PotionEffectType;
-import pl.mrstudios.deathrun.api.arena.booster.enums.Direction;
 import pl.mrstudios.deathrun.arena.booster.Booster;
 import pl.mrstudios.deathrun.arena.booster.BoosterItem;
 import pl.mrstudios.deathrun.arena.effect.BlockEffect;
 
 import java.util.List;
+
+import static eu.okaeri.configs.annotation.NameModifier.TO_LOWER_CASE;
+import static eu.okaeri.configs.annotation.NameStrategy.HYPHEN_CASE;
+import static java.util.List.of;
+import static org.bukkit.Material.*;
+import static org.bukkit.Sound.*;
+import static org.bukkit.potion.PotionEffectType.JUMP;
+import static org.bukkit.potion.PotionEffectType.SPEED;
+import static pl.mrstudios.deathrun.api.arena.booster.enums.Direction.FORWARD;
 
 @Header({
         " ",
@@ -22,7 +30,8 @@ import java.util.List;
         " contact with us through Discord or create issue on GitHub. If you need",
         " help with configuration visit https://mrstudios.pl/documentation.",
         " "
-}) @Names(strategy = NameStrategy.HYPHEN_CASE, modifier = NameModifier.TO_LOWER_CASE)
+}) @SuppressWarnings("deprecation")
+@Names(strategy = HYPHEN_CASE, modifier = TO_LOWER_CASE)
 public class PluginConfiguration extends OkaeriConfig {
 
     @Comment({
@@ -70,9 +79,9 @@ public class PluginConfiguration extends OkaeriConfig {
             ""
     })
 
-    public List<BlockEffect> blockEffects = List.of(
-            new BlockEffect(Material.EMERALD_BLOCK, PotionEffectType.JUMP, 7, 1.5f),
-            new BlockEffect(Material.REDSTONE_BLOCK, PotionEffectType.SPEED, 5, 1.5f)
+    public List<BlockEffect> blockEffects = of(
+            new BlockEffect(EMERALD_BLOCK, JUMP, 7, 1.5f),
+            new BlockEffect(REDSTONE_BLOCK, SPEED, 5, 1.5f)
     );
 
     @Comment({
@@ -82,23 +91,23 @@ public class PluginConfiguration extends OkaeriConfig {
             "------------------------------------------------------------------------",
             ""
     })
-    public List<Booster> boosters = List.of(
+    public List<Booster> boosters = of(
             new Booster(
                     0,
                     2.5f,
                     10,
                     new BoosterItem(
                             "<green>Booster <gray>(Right Click)",
-                            Material.FEATHER,
+                            FEATHER,
                             null
                     ),
                     new BoosterItem(
                             "<red>Booster <gray>(<delay> seconds)",
-                            Material.FEATHER,
+                            FEATHER,
                             null
                     ),
-                    Direction.FORWARD,
-                    Sound.ENTITY_BLAZE_AMBIENT
+                    FORWARD,
+                    ENTITY_BLAZE_AMBIENT
             )
     );
 
@@ -109,11 +118,11 @@ public class PluginConfiguration extends OkaeriConfig {
             "------------------------------------------------------------------------",
             ""
     })
-    public Sound arenaSoundPreStarting = Sound.BLOCK_NOTE_BLOCK_PLING;
-    public Sound arenaSoundStarting = Sound.ENTITY_EXPERIENCE_ORB_PICKUP;
-    public Sound arenaSoundStarted = Sound.ENTITY_ENDER_DRAGON_GROWL;
-    public Sound arenaSoundCheckpointReached = Sound.ENTITY_EXPERIENCE_ORB_PICKUP;
-    public Sound arenaSoundTrapDelay = Sound.ENTITY_VILLAGER_NO;
-    public Sound arenaSoundPlayerDeath = Sound.ENTITY_SKELETON_DEATH;
+    public Sound arenaSoundPreStarting = BLOCK_NOTE_BLOCK_PLING;
+    public Sound arenaSoundStarting = ENTITY_EXPERIENCE_ORB_PICKUP;
+    public Sound arenaSoundStarted = ENTITY_ENDER_DRAGON_GROWL;
+    public Sound arenaSoundCheckpointReached = ENTITY_EXPERIENCE_ORB_PICKUP;
+    public Sound arenaSoundTrapDelay = ENTITY_VILLAGER_NO;
+    public Sound arenaSoundPlayerDeath = ENTITY_SKELETON_DEATH;
 
 }

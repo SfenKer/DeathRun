@@ -3,7 +3,6 @@ package pl.mrstudios.deathrun.arena.listener;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerAttemptPickupItemEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerPickupArrowEvent;
@@ -12,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import pl.mrstudios.commons.inject.annotation.Inject;
 
 import static org.bukkit.event.EventPriority.MONITOR;
+import static org.bukkit.event.inventory.InventoryType.PLAYER;
 
 public class ArenaInventoryActionListener implements Listener {
 
@@ -26,7 +26,7 @@ public class ArenaInventoryActionListener implements Listener {
         if (event.getClickedInventory() == null)
             return;
 
-        if (event.getClickedInventory().getType() != InventoryType.PLAYER)
+        if (event.getClickedInventory().getType() != PLAYER)
             return;
 
         event.setCancelled(true);

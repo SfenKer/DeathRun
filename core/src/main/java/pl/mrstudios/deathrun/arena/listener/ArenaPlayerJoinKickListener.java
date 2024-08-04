@@ -34,7 +34,7 @@ public class ArenaPlayerJoinKickListener implements Listener {
 
     }
 
-    @Deprecated
+    @SuppressWarnings("deprecation")
     @EventHandler(priority = MONITOR)
     public void onPlayerLogin(
             @NotNull PlayerLoginEvent event

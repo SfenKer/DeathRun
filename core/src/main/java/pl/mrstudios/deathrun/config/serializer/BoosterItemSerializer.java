@@ -38,7 +38,9 @@ public class BoosterItemSerializer implements ObjectSerializer<IBoosterItem> {
     }
 
     @Override
-    public boolean supports(@NotNull Class<? super IBoosterItem> type) {
+    public boolean supports(
+            @NotNull Class<? super IBoosterItem> type
+    ) {
         return IBoosterItem.class.isAssignableFrom(type);
     }
 

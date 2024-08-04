@@ -53,7 +53,9 @@ public class User implements IUser {
     }
 
     @Override
-    public void setRole(@NotNull Role role) {
+    public void setRole(
+            @NotNull Role role
+    ) {
         this.role = role;
     }
 

@@ -8,8 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import pl.mrstudios.commons.inject.annotation.Inject;
 import pl.mrstudios.deathrun.config.Configuration;
 
-import java.util.stream.Stream;
-
+import static java.util.Arrays.stream;
 import static org.bukkit.Material.*;
 import static org.bukkit.event.EventPriority.MONITOR;
 import static org.bukkit.event.block.Action.PHYSICAL;
@@ -36,7 +35,7 @@ public class ArenaTeleportPadListener implements Listener {
         if (event.getClickedBlock() == null)
             return;
 
-        if (Stream.of(this.plates).noneMatch((material) -> material == event.getClickedBlock().getType()))
+        if (stream(pressurePlates).noneMatch((material) -> material == event.getClickedBlock().getType()))
             return;
 
         this.configuration.map().teleportPads
@@ -50,7 +49,7 @@ public class ArenaTeleportPadListener implements Listener {
 
     }
 
-    protected final Material[] plates = {
+    protected static final Material[] pressurePlates = {
             POLISHED_BLACKSTONE_PRESSURE_PLATE, ACACIA_PRESSURE_PLATE,
             BIRCH_PRESSURE_PLATE, CRIMSON_PRESSURE_PLATE,
             DARK_OAK_PRESSURE_PLATE, HEAVY_WEIGHTED_PRESSURE_PLATE,

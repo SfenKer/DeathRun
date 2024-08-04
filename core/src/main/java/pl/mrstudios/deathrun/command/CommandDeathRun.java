@@ -2,7 +2,6 @@ package pl.mrstudios.deathrun.command;
 
 import com.sk89q.worldedit.LocalSession;
 import com.sk89q.worldedit.WorldEdit;
-import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.regions.Region;
 import dev.rollczi.litecommands.annotations.argument.Arg;
 import dev.rollczi.litecommands.annotations.command.Command;
@@ -10,7 +9,7 @@ import dev.rollczi.litecommands.annotations.context.Context;
 import dev.rollczi.litecommands.annotations.execute.Execute;
 import dev.rollczi.litecommands.annotations.permission.Permission;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
-import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.lingala.zip4j.ZipFile;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -27,20 +26,24 @@ import pl.mrstudios.deathrun.arena.pad.TeleportPad;
 import pl.mrstudios.deathrun.arena.trap.TrapRegistry;
 import pl.mrstudios.deathrun.config.Configuration;
 
-import java.io.File;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
+import static com.sk89q.worldedit.bukkit.BukkitAdapter.adapt;
+import static java.lang.String.format;
 import static java.lang.String.join;
+import static java.nio.file.Files.createDirectories;
+import static java.nio.file.Files.createFile;
+import static java.nio.file.Paths.get;
+import static java.util.Collections.emptyList;
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Stream.of;
+import static net.kyori.adventure.text.minimessage.MiniMessage.miniMessage;
 import static org.bukkit.Material.*;
 import static pl.mrstudios.deathrun.api.arena.user.enums.Role.DEATH;
 import static pl.mrstudios.deathrun.api.arena.user.enums.Role.RUNNER;
 import static pl.mrstudios.deathrun.util.ChannelUtil.connect;
-import static pl.mrstudios.deathrun.util.ZipUtil.zip;
 
 @Command(
         name = "deathrun",
@@ -52,7 +55,6 @@ public class CommandDeathRun {
     private final Plugin plugin;
     private final WorldEdit worldEdit;
 
-    private final MiniMessage miniMessage;
     private final BukkitAudiences audiences;
 
     private final TrapRegistry  trapRegistry;
@@ -63,14 +65,12 @@ public class CommandDeathRun {
             @NotNull Plugin plugin,
             @NotNull WorldEdit worldEdit,
             @NotNull BukkitAudiences audiences,
-            @NotNull MiniMessage miniMessage,
-            @NotNull TrapRegistry  trapRegistry,
+            @NotNull TrapRegistry trapRegistry,
             @NotNull Configuration configuration
     ) {
         this.plugin = plugin;
         this.worldEdit = worldEdit;
         this.audiences = audiences;
-        this.miniMessage = miniMessage;
         this.trapRegistry = trapRegistry;
         this.configuration = configuration;
     }
@@ -106,7 +106,7 @@ public class CommandDeathRun {
     ) {
 
         if (!this.configuration.map().arenaSetupEnabled) {
-            this.audiences.player(player).sendMessage(this.miniMessage.deserialize("<reset> <dark_red><b>*</b> <red>You can't use that command while setup is disabled."));
+            this.audiences.player(player).sendMessage(miniMessage().deserialize("<reset> <dark_red><b>*</b> <red>You can't use that command while setup is disabled."));
             return;
         }
 
@@ -133,7 +133,7 @@ public class CommandDeathRun {
     ) {
 
         if (!this.configuration.map().arenaSetupEnabled) {
-            this.audiences.player(player).sendMessage(this.miniMessage.deserialize("<reset> <dark_red><b>*</b> <red>You can't use that command while setup is disabled."));
+            this.audiences.player(player).sendMessage(miniMessage().deserialize("<reset> <dark_red><b>*</b> <red>You can't use that command while setup is disabled."));
             return;
         }
 
@@ -147,13 +147,13 @@ public class CommandDeathRun {
 
     @Execute(name = "setup addspawn")
     @Permission("mrstudios.command.deathrun.setup")
-    public void addRunnerSpawn(
+    public void addSpawn(
             @Context Player player,
             @Arg("role") Role role
     ) {
 
         if (!this.configuration.map().arenaSetupEnabled) {
-            this.audiences.player(player).sendMessage(this.miniMessage.deserialize("<reset> <dark_red><b>*</b> <red>You can't use that command while setup is disabled."));
+            this.audiences.player(player).sendMessage(miniMessage().deserialize("<reset> <dark_red><b>*</b> <red>You can't use that command while setup is disabled."));
             return;
         }
 
@@ -226,7 +226,7 @@ public class CommandDeathRun {
     ) {
 
         if (!this.configuration.map().arenaSetupEnabled) {
-            this.audiences.player(player).sendMessage(this.miniMessage.deserialize("<reset> <dark_red><b>*</b> <red>You can't use that command while setup is disabled."));
+            this.audiences.player(player).sendMessage(miniMessage().deserialize("<reset> <dark_red><b>*</b> <red>You can't use that command while setup is disabled."));
             return;
         }
 
@@ -251,7 +251,7 @@ public class CommandDeathRun {
     ) {
 
         if (!this.configuration.map().arenaSetupEnabled) {
-            this.audiences.player(player).sendMessage(this.miniMessage.deserialize("<reset> <dark_red><b>*</b> <red>You can't use that command while setup is disabled."));
+            this.audiences.player(player).sendMessage(miniMessage().deserialize("<reset> <dark_red><b>*</b> <red>You can't use that command while setup is disabled."));
             return;
         }
 
@@ -272,7 +272,7 @@ public class CommandDeathRun {
     ) {
 
         if (!this.configuration.map().arenaSetupEnabled) {
-            this.audiences.player(player).sendMessage(this.miniMessage.deserialize("<reset> <dark_red><b>*</b> <red>You can't use that command while setup is disabled."));
+            this.audiences.player(player).sendMessage(miniMessage().deserialize("<reset> <dark_red><b>*</b> <red>You can't use that command while setup is disabled."));
             return;
         }
 
@@ -288,7 +288,7 @@ public class CommandDeathRun {
     ) {
 
         if (!this.configuration.map().arenaSetupEnabled) {
-            this.audiences.player(player).sendMessage(this.miniMessage.deserialize("<reset> <dark_red><b>*</b> <red>You can't use that command while setup is disabled."));
+            this.audiences.player(player).sendMessage(miniMessage().deserialize("<reset> <dark_red><b>*</b> <red>You can't use that command while setup is disabled."));
             return;
         }
 
@@ -304,16 +304,25 @@ public class CommandDeathRun {
     ) {
 
         if (!this.configuration.map().arenaSetupEnabled) {
-            this.audiences.player(player).sendMessage(this.miniMessage.deserialize("<reset> <dark_red><b>*</b> <red>You can't use that command while setup is disabled."));
+            this.audiences.player(player).sendMessage(miniMessage().deserialize("<reset> <dark_red><b>*</b> <red>You can't use that command while setup is disabled."));
             return;
         }
 
         this.configuration.map().arenaSetupEnabled = false;
         this.configuration.map().save();
 
-        zip(new File(this.plugin.getDataFolder(), "backup/" + player.getWorld().getName() + ".zip"), new Path[] {
-                player.getWorld().getWorldFolder().toPath()
-        });
+        Path path = get(this.plugin.getDataFolder().toString(), "backup/", format("%s.zip", player.getWorld().getName()));
+
+        try {
+            createDirectories(path.getParent());
+            createFile(path);
+        } catch (@NotNull Exception exception) {
+            throw new RuntimeException("Unable to save world backup due to an exception.", exception);
+        }
+
+        try (ZipFile zipFile = new ZipFile(path.toString())) {
+            zipFile.addFolder(player.getWorld().getWorldFolder());
+        } catch (@NotNull Exception ignored) {}
 
         this.message(player, "<reset> <dark_green><b>*</b> <green>Arena configuration saved successfully, please restart server to apply changes.");
 
@@ -323,7 +332,7 @@ public class CommandDeathRun {
             @NotNull Player player, String message,
             @Nullable Object... args
     ) {
-        this.audiences.player(player).sendMessage(this.miniMessage.deserialize(String.format(message, args)));
+        this.audiences.player(player).sendMessage(miniMessage().deserialize(format(message, args)));
     }
 
     protected List<Location> locations(@NotNull Player player) {
@@ -331,19 +340,18 @@ public class CommandDeathRun {
         try {
 
             List<Location> locations = new ArrayList<>();
-
             LocalSession session = this.worldEdit.getSessionManager().findByName(player.getName());
 
             assert session != null;
             Region region = session.getSelection(session.getSelectionWorld());
 
-            region.forEach((vector) -> locations.add(BukkitAdapter.adapt(player.getWorld(), vector)));
+            region.forEach((vector) -> locations.add(adapt(player.getWorld(), vector)));
 
             return locations;
 
-        } catch (Exception ignored) {}
+        } catch (@NotNull Exception ignored) {}
 
-        return Collections.emptyList();
+        return emptyList();
 
     }
 
@@ -354,7 +362,7 @@ public class CommandDeathRun {
     ) throws Exception {
 
         if (!this.configuration.map().arenaSetupEnabled) {
-            this.audiences.player(player).sendMessage(this.miniMessage.deserialize("<reset> <dark_red><b>*</b> <red>You can't use that command while setup is disabled."));
+            this.audiences.player(player).sendMessage(miniMessage().deserialize("<reset> <dark_red><b>*</b> <red>You can't use that command while setup is disabled."));
             return;
         }
 

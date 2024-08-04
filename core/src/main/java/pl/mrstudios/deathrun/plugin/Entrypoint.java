@@ -4,17 +4,15 @@ import com.sk89q.worldedit.WorldEdit;
 import dev.rollczi.litecommands.LiteCommands;
 import dev.rollczi.litecommands.annotations.command.Command;
 import dev.rollczi.litecommands.argument.ArgumentKey;
-import dev.rollczi.litecommands.bukkit.LiteCommandsBukkit;
 import dev.rollczi.litecommands.suggestion.SuggestionResult;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
-import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.kyori.adventure.text.serializer.bungeecord.BungeeComponentSerializer;
-import org.apache.commons.io.FileUtils;
+import net.lingala.zip4j.ZipFile;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 import pl.mrstudios.commons.inject.Injector;
 import pl.mrstudios.commons.inject.annotation.Inject;
 import pl.mrstudios.commons.reflection.Reflections;
@@ -30,29 +28,30 @@ import pl.mrstudios.deathrun.config.impl.LanguageConfiguration;
 import pl.mrstudios.deathrun.config.impl.MapConfiguration;
 import pl.mrstudios.deathrun.config.impl.PluginConfiguration;
 import pl.mrstudios.deathrun.exception.MissingDependencyException;
-import pl.mrstudios.deathrun.util.ZipUtil;
 
 import java.io.File;
 import java.util.Objects;
-import java.util.stream.Stream;
 
+import static com.sk89q.worldedit.WorldEdit.getInstance;
 import static dev.rollczi.litecommands.annotations.LiteCommandsAnnotations.of;
+import static dev.rollczi.litecommands.bukkit.LiteCommandsBukkit.builder;
 import static dev.rollczi.litecommands.schematic.SchematicFormat.angleBrackets;
-import static java.lang.System.currentTimeMillis;
+import static java.lang.String.format;
+import static java.nio.file.Paths.get;
 import static java.util.Arrays.asList;
 import static java.util.Arrays.stream;
+import static net.kyori.adventure.platform.bukkit.BukkitAudiences.create;
+import static org.apache.commons.io.FileUtils.deleteDirectory;
 import static pl.mrstudios.deathrun.api.API.apiInstance;
 import static pl.mrstudios.deathrun.api.API.createInstance;
 
 @SuppressWarnings("all")
-public class Bootstrap extends JavaPlugin {
+public class Entrypoint extends JavaPlugin {
 
     private Arena arena;
     private TrapRegistry trapRegistry;
 
-    private MiniMessage miniMessage;
     private BukkitAudiences audiences;
-    private BungeeComponentSerializer bungeeComponentSerializer;
 
     private Configuration configuration;
     private ConfigurationFactory configurationFactory;
@@ -69,7 +68,7 @@ public class Bootstrap extends JavaPlugin {
             throw new MissingDependencyException("You must have WorldEdit (v7.2.9+) installed on your server to use this plugin.");
 
         /* World Edit */
-        this.worldEdit = WorldEdit.getInstance();
+        this.worldEdit = getInstance();
 
         /* Configuration */
         this.configurationFactory = new ConfigurationFactory(this.getDataFolder().toPath());
@@ -80,10 +79,7 @@ public class Bootstrap extends JavaPlugin {
         );
 
         /* Kyori */
-        this.audiences = BukkitAudiences.create(this);
-        this.bungeeComponentSerializer = BungeeComponentSerializer.get();
-        this.miniMessage = MiniMessage.builder()
-                .build();
+        this.audiences = create(this);
 
         /* Create Arena Instance */
         this.arena = new Arena(this.configuration.map().arenaName);
@@ -99,9 +95,7 @@ public class Bootstrap extends JavaPlugin {
                 .register(Server.class, this.getServer())
 
                 /* Kyori */
-                .register(MiniMessage.class, this.miniMessage)
                 .register(BukkitAudiences.class, this.audiences)
-                .register(BungeeComponentSerializer.class, this.bungeeComponentSerializer)
 
                 /* World Edit */
                 .register(WorldEdit.class, this.worldEdit)
@@ -121,7 +115,7 @@ public class Bootstrap extends JavaPlugin {
         ).forEach(this.trapRegistry::register);
 
         /* Register Commands */
-        this.liteCommands = LiteCommandsBukkit.builder()
+        this.liteCommands = builder()
 
                 /* Settings */
                 .settings((settings) -> settings.nativePermissions(false))
@@ -135,8 +129,7 @@ public class Bootstrap extends JavaPlugin {
                         new Reflections<>("pl.mrstudios.deathrun.command")
                                 .getClassesAnnotatedWith(Command.class)
                                 .stream().map(this.injector::inject)
-                                .filter(Objects::nonNull)
-                                .toArray(Object[]::new)
+                                .filter(Objects::nonNull).toArray(Object[]::new)
                 ))
 
                 /* Schematic */
@@ -211,28 +204,25 @@ public class Bootstrap extends JavaPlugin {
 
         try {
 
-            Stream.of(new File(this.getDataFolder(), "backup").listFiles())
+            stream(new File(this.getDataFolder(), "backup").listFiles())
                     .filter((file) -> file.getName().endsWith(".zip"))
                     .forEach((file) -> {
 
-                        long startTime = currentTimeMillis();
-                        this.getLogger().info("Restoring " + file.getName().replace(".zip", "") + " world backup.");
-
                         try {
 
-                            File worldFile = new File(file.getName().replace(".zip", ""));
-                            FileUtils.deleteDirectory(worldFile);
+                            deleteDirectory(get(file.getName().replace(".zip", "")).toFile());
 
-                            ZipUtil.unzip(file, worldFile.toPath());
-                            this.getLogger().info("Restoring " + file.getName().replace(".zip", "") + " world backup complete. [" + (currentTimeMillis() - startTime) + "ms]");
+                            try (ZipFile zipFile = new ZipFile(file)) {
+                                zipFile.extractAll(get("./").toString());
+                            }
 
-                        } catch (Exception exception) {
-                            this.getLogger().severe("Restoring " + file.getName().replace(".zip", "") + " world backup failed. [" + (currentTimeMillis() - startTime) + "ms]");
+                        } catch (@NotNull Exception exception) {
+                            this.getLogger().severe(format("An error occurred while restoring %s world backup.", file.getName().replace(".zip", "")));
                         }
 
                     });
 
-        } catch (Exception ignored) {}
+        } catch (@NotNull Exception ignored) {}
 
     }
 

@@ -90,7 +90,9 @@ public class Arena implements IArena {
     }
 
     @Override
-    public @Nullable IUser getUser(@NotNull String string) {
+    public @Nullable IUser getUser(
+            @NotNull String string
+    ) {
         return this.users.stream()
                 .filter((user) -> user.getName().equals(string))
                 .findFirst()
@@ -98,7 +100,9 @@ public class Arena implements IArena {
     }
 
     @Override
-    public @Nullable IUser getUser(@NotNull UUID uniqueId) {
+    public @Nullable IUser getUser(
+            @NotNull UUID uniqueId
+    ) {
         return this.users.stream()
                 .filter(
                         (user) -> user.getUniqueId().equals(uniqueId)
@@ -107,7 +111,9 @@ public class Arena implements IArena {
     }
 
     @Override
-    public @Nullable IUser getUser(@NotNull Player player) {
+    public @Nullable IUser getUser(
+            @NotNull Player player
+    ) {
         return this.users.stream()
                 .filter((user) -> user.getName().equals(player.getName()) && user.getUniqueId().equals(player.getUniqueId()))
                 .findFirst()

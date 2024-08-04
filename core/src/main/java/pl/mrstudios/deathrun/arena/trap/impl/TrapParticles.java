@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pl.mrstudios.deathrun.api.arena.trap.annotations.Serializable;
 import pl.mrstudios.deathrun.arena.trap.Trap;
-import pl.mrstudios.deathrun.plugin.Bootstrap;
+import pl.mrstudios.deathrun.plugin.Entrypoint;
 
 import java.time.Duration;
 import java.util.List;
@@ -36,7 +36,7 @@ public class TrapParticles extends Trap {
     @Override
     public void start() {
         this.bukkitTask = getServer().getScheduler()
-                .runTaskTimer(getPlugin(Bootstrap.class), () -> super.locations.stream().map(Location::toCenterLocation).forEach((location) -> {
+                .runTaskTimer(getPlugin(Entrypoint.class), () -> super.locations.stream().map(Location::toCenterLocation).forEach((location) -> {
 
                     location.getWorld().spawnParticle(this.particle, location, this.count, this.offset, this.offset, this.offset, 0);
                     location.getNearbyPlayers(1, this.offset * 2)

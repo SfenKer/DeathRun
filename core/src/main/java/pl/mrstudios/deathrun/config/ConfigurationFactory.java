@@ -15,11 +15,17 @@ public record ConfigurationFactory(
         @NotNull Path directory
 ) {
 
-    public <CONFIG extends OkaeriConfig> CONFIG produce(@NotNull Class<CONFIG> clazz, @NotNull String file) {
-        return produce(clazz, new File(this.directory.toFile(), file));
+    public <CONFIG extends OkaeriConfig> CONFIG produce(
+            @NotNull Class<CONFIG> clazz,
+            @NotNull String file
+    ) {
+        return produce(clazz, this.directory.resolve(file).toFile());
     }
 
-    public <CONFIG extends OkaeriConfig> CONFIG produce(@NotNull Class<CONFIG> clazz, @NotNull File file) {
+    public <CONFIG extends OkaeriConfig> CONFIG produce(
+            @NotNull Class<CONFIG> clazz,
+            @NotNull File file
+    ) {
         return create(clazz, (initializer) ->
                 initializer.withConfigurer(new YamlBukkitConfigurer(), new SerdesBukkit(), new PluginSerdes())
                         .withBindFile(file)

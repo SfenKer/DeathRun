@@ -227,3 +227,4 @@ Libraries that is used in this project, most of them are open source libraries.
 - [okaeri-configs](https://github.com/OkaeriPoland/okaeri-configs) by Okaeri
 - [commons-io](https://github.com/apache/commons-io) by Apache Software Foundation
 - [java-commons](https://github.com/MrStudios/java-commons) by MrStudios Industries
+- [Zip4J](https://github.com/srikanth-lingala/zip4j) by Lingala

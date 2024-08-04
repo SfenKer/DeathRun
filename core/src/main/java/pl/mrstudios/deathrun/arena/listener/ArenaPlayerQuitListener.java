@@ -1,7 +1,6 @@
 package pl.mrstudios.deathrun.arena.listener;
 
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Server;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -15,6 +14,7 @@ import pl.mrstudios.deathrun.config.Configuration;
 import static java.lang.String.valueOf;
 import static java.util.Objects.requireNonNull;
 import static java.util.Optional.ofNullable;
+import static net.kyori.adventure.text.minimessage.MiniMessage.miniMessage;
 import static org.bukkit.event.EventPriority.MONITOR;
 import static pl.mrstudios.deathrun.api.arena.enums.GameState.STARTING;
 import static pl.mrstudios.deathrun.api.arena.enums.GameState.WAITING;
@@ -23,7 +23,6 @@ public class ArenaPlayerQuitListener implements Listener {
 
     private final Arena arena;
     private final Server server;
-    private final MiniMessage miniMessage;
     private final BukkitAudiences audiences;
     private final Configuration configuration;
 
@@ -31,14 +30,12 @@ public class ArenaPlayerQuitListener implements Listener {
     public ArenaPlayerQuitListener(
             @NotNull Arena arena,
             @NotNull Server server,
-            @NotNull MiniMessage miniMessage,
             @NotNull BukkitAudiences audiences,
             @NotNull Configuration configuration
     ) {
         this.arena = arena;
         this.server = server;
         this.audiences = audiences;
-        this.miniMessage = miniMessage;
         this.configuration = configuration;
     }
 
@@ -60,7 +57,7 @@ public class ArenaPlayerQuitListener implements Listener {
                         return;
 
                     this.arena.getUsers().forEach((target) ->
-                            this.audiences.player(requireNonNull(target.asBukkit())).sendMessage(this.miniMessage.deserialize(
+                            this.audiences.player(requireNonNull(target.asBukkit())).sendMessage(miniMessage().deserialize(
                                     this.configuration.language().chatMessageArenaPlayerLeft
                                             .replace("<player>", event.getPlayer().getDisplayName())
                                             .replace("<currentPlayers>", valueOf(this.arena.getUsers().size()))
