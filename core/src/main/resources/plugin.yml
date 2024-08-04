@@ -10,4 +10,4 @@ softdepend:
 # Plugin Data
 load: 'POSTWORLD'
 api-version: '1.16'
-main: 'pl.mrstudios.deathrun.plugin.Bootstrap'
+main: 'pl.mrstudios.deathrun.plugin.Entrypoint'

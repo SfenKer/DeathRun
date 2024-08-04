@@ -1,9 +1,15 @@
 package pl.mrstudios.deathrun.config.impl;
 
 import eu.okaeri.configs.OkaeriConfig;
-import eu.okaeri.configs.annotation.*;
+import eu.okaeri.configs.annotation.Comment;
+import eu.okaeri.configs.annotation.Header;
+import eu.okaeri.configs.annotation.Names;
 
 import java.util.List;
+
+import static eu.okaeri.configs.annotation.NameModifier.TO_LOWER_CASE;
+import static eu.okaeri.configs.annotation.NameStrategy.HYPHEN_CASE;
+import static java.util.Arrays.asList;
 
 @Header({
         " ",
@@ -15,7 +21,8 @@ import java.util.List;
         " contact with us through Discord or create issue on GitHub. If you need",
         " help with configuration visit https://mrstudios.pl/documentation.",
         " "
-}) @Names(strategy = NameStrategy.HYPHEN_CASE, modifier = NameModifier.TO_LOWER_CASE)
+}) @SuppressWarnings("deprecation")
+@Names(strategy = HYPHEN_CASE, modifier = TO_LOWER_CASE)
 public class LanguageConfiguration extends OkaeriConfig {
 
     @Comment({
@@ -32,21 +39,21 @@ public class LanguageConfiguration extends OkaeriConfig {
     public String chatMessageArenaStartingTimer = "<yellow>Game starts in <gold><timer> seconds<yellow>.";
     public String chatMessageArenaPlayerFinished = "<reset> <white><b>FINISH ></b> <gray>Player <gold><player> <gray>has finished game in <white><seconds> seconds<gray>. <dark_gray>(#<finishPosition>)";
 
-    public List<String> chatMessageArenaGameStartRunner = List.of(
+    public List<String> chatMessageArenaGameStartRunner = asList(
             "<reset>",
             "<reset>   <gold><b>*</b> <gray>You are <green>Runner<gray>.",
             "<reset>   <white><b>*</b> <gray>Your task is complete run in shortest possible time, during this task interfering player will trigger various traps.",
             "<reset>"
     );
 
-    public List<String> chatMessageArenaGameStartDeath = List.of(
+    public List<String> chatMessageArenaGameStartDeath = asList(
             "<reset>",
             "<reset>   <gold><b>*</b> <gray>You are <red>Death<gray>.",
             "<reset>   <white><b>*</b> <gray>Your task is to disturb runners by launching traps.",
             "<reset>"
     );
 
-    public List<String> chatMessageGameEndSpectator = List.of(
+    public List<String> chatMessageGameEndSpectator = asList(
             "<reset>",
             "<reset>   <gold><b>*</b> <gray>You are <dark_gray>Spectator<gray>.",
             "<reset>   <white><b>*</b> <gray>Now you can follow other players.",
@@ -90,7 +97,7 @@ public class LanguageConfiguration extends OkaeriConfig {
     })
     public String arenaScoreboardTitle = "<yellow><b>DEATH RUN";
 
-    public List<String> arenaScoreboardLinesWaiting = List.of(
+    public List<String> arenaScoreboardLinesWaiting = asList(
             "<reset>",
             "<white>Map: <green><map>",
             "<white>Players: <green><currentPlayers>/<maxPlayers>",
@@ -100,7 +107,7 @@ public class LanguageConfiguration extends OkaeriConfig {
             "<yellow>www.mrstudios.pl"
     );
 
-    public List<String> arenaScoreboardLinesStarting = List.of(
+    public List<String> arenaScoreboardLinesStarting = asList(
             "<reset>",
             "<white>Map: <green><map>",
             "<white>Players: <green><currentPlayers>/<maxPlayers>",
@@ -110,7 +117,7 @@ public class LanguageConfiguration extends OkaeriConfig {
             "<yellow>www.mrstudios.pl"
     );
 
-    public List<String> arenaScoreboardLinesPlaying = List.of(
+    public List<String> arenaScoreboardLinesPlaying = asList(
             "<reset>",
             "<white>Time: <green><timeFormatted>",
             "<white>Role: <green><role>",

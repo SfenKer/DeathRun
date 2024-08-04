@@ -35,7 +35,9 @@ public class CheckpointSerializer implements ObjectSerializer<ICheckpoint> {
     }
 
     @Override
-    public boolean supports(@NotNull Class<? super ICheckpoint> type) {
+    public boolean supports(
+            @NotNull Class<? super ICheckpoint> type
+    ) {
         return ICheckpoint.class.isAssignableFrom(type);
     }
 

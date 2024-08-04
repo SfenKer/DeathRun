@@ -8,11 +8,11 @@ import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import pl.mrstudios.commons.inject.annotation.Inject;
 import pl.mrstudios.deathrun.config.Configuration;
-import pl.mrstudios.deathrun.util.ChannelUtil;
 
 import static org.bukkit.Material.RED_BED;
 import static org.bukkit.event.block.Action.RIGHT_CLICK_AIR;
 import static org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK;
+import static pl.mrstudios.deathrun.util.ChannelUtil.connect;
 
 public class ArenaClickItemListener implements Listener {
 
@@ -40,7 +40,7 @@ public class ArenaClickItemListener implements Listener {
         if (event.getPlayer().getItemInHand().getType() != RED_BED)
             return;
 
-        ChannelUtil.connect(plugin, event.getPlayer(), this.configuration.plugin().server);
+        connect(plugin, event.getPlayer(), this.configuration.plugin().server);
 
     }
 

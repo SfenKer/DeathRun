@@ -303,8 +303,8 @@ public class ArenaServiceRunnable extends BukkitRunnable {
             return;
 
         this.arena.getUsers()
-                .stream()
-                .map(IUser::asBukkit)
+                .stream().map(IUser::asBukkit)
+                .filter(Objects::nonNull)
                 .forEach((player) -> connect(this.plugin, player, this.configuration.plugin().server));
 
         if (this.endDelayTimer > -5)

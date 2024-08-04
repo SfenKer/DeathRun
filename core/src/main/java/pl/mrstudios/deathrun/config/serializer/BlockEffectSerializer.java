@@ -8,6 +8,7 @@ import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 import pl.mrstudios.deathrun.arena.effect.BlockEffect;
 
+import static java.util.Objects.requireNonNull;
 import static org.bukkit.potion.PotionEffectType.getByName;
 
 public class BlockEffectSerializer implements ObjectSerializer<BlockEffect> {
@@ -31,14 +32,16 @@ public class BlockEffectSerializer implements ObjectSerializer<BlockEffect> {
     ) {
         return new BlockEffect(
                 data.get("block", Material.class),
-                getByName(data.get("effect", String.class)),
+                requireNonNull(getByName(data.get("effect", String.class))),
                 data.get("amplifier", Integer.class),
                 data.get("duration", Float.class)
         );
     }
 
     @Override
-    public boolean supports(@NotNull Class<? super BlockEffect> type) {
+    public boolean supports(
+            @NotNull Class<? super BlockEffect> type
+    ) {
         return BlockEffect.class.isAssignableFrom(type);
     }
 

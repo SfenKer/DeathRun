@@ -8,7 +8,9 @@ import pl.mrstudios.deathrun.config.serializer.*;
 public class PluginSerdes implements OkaeriSerdesPack {
 
     @Override
-    public void register(@NotNull SerdesRegistry registry) {
+    public void register(
+            @NotNull SerdesRegistry registry
+    ) {
         registry.register(new TrapSerializer());
         registry.register(new CheckpointSerializer());
         registry.register(new TeleportPadSerializer());

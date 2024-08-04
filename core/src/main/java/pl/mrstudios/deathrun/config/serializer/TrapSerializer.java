@@ -11,11 +11,12 @@ import pl.mrstudios.deathrun.api.arena.trap.ITrap;
 import pl.mrstudios.deathrun.api.arena.trap.annotations.Serializable;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 
 import static java.lang.Class.forName;
 import static java.util.Arrays.asList;
+import static pl.mrstudios.deathrun.util.ReflectionUtil.readField;
+import static pl.mrstudios.deathrun.util.ReflectionUtil.writeField;
 
 public class TrapSerializer implements ObjectSerializer<ITrap> { // TODO: Complete refactor of this class.
 
@@ -26,23 +27,14 @@ public class TrapSerializer implements ObjectSerializer<ITrap> { // TODO: Comple
             @NotNull GenericsDeclaration generics
     ) {
 
-        List<Field> fields = new ArrayList<>(asList(object.getClass().getDeclaredFields()));
+        Collection<Field> fields = asList(object.getClass().getDeclaredFields());
 
         data.add("button", object.getButton());
         data.addCollection("locations", object.getLocations(), Location.class);
-        fields.forEach((field) -> {
-
-            if (!field.isAnnotationPresent(Serializable.class))
-                return;
-
-            if (!field.canAccess(object))
-                field.setAccessible(true);
-
-            try {
-                data.add(field.getName(), field.get(object));
-            } catch (Exception ignored) {}
-
-        });
+        fields.stream()
+                .filter((field) -> field.isAnnotationPresent(Serializable.class))
+                .peek((field) -> field.setAccessible(true))
+                .forEach((field) -> data.add(field.getName(), readField(field, object)));
 
         data.add("class", object.getClass().getName());
 
@@ -56,35 +48,28 @@ public class TrapSerializer implements ObjectSerializer<ITrap> { // TODO: Comple
 
         try {
 
-            ITrap trap = (ITrap) forName(data.get("class", String.class)).getDeclaredConstructor().newInstance();
-            List<Field> fields = new ArrayList<>(asList(trap.getClass().getDeclaredFields()));
+            ITrap object = (ITrap) forName(data.get("class", String.class)).getDeclaredConstructor().newInstance();
+            Collection<Field> fields = asList(object.getClass().getDeclaredFields());
 
-            trap.setButton(data.get("button", Location.class));
-            trap.setLocations(data.getAsList("locations", Location.class));
-            fields.forEach((field) -> {
+            object.setButton(data.get("button", Location.class));
+            object.setLocations(data.getAsList("locations", Location.class));
+            fields.stream()
+                    .filter((field) -> field.isAnnotationPresent(Serializable.class))
+                    .peek((field) -> field.setAccessible(true))
+                    .forEach((field) -> writeField(field, object, data.get(field.getName(), field.getType())));
 
-                if (!field.isAnnotationPresent(Serializable.class))
-                    return;
+            return object;
 
-                if (!field.canAccess(trap))
-                    field.setAccessible(true);
-
-                try {
-                    field.set(trap, data.get(field.getName(), field.getType()));
-                } catch (Exception ignored) {}
-
-            });
-
-            return trap;
-
-        } catch (Exception ignored) {}
+        } catch (@NotNull Exception ignored) {}
 
         throw new SerializerException("Unable to deserialize '" + data.get("class", String.class) + "', if this is bug please contact with support.");
 
     }
 
     @Override
-    public boolean supports(@NotNull Class<? super ITrap> type) {
+    public boolean supports(
+            @NotNull Class<? super ITrap> type
+    ) {
         return ITrap.class.isAssignableFrom(type);
     }
 

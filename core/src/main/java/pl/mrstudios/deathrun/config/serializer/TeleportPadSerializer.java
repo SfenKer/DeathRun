@@ -33,7 +33,9 @@ public class TeleportPadSerializer implements ObjectSerializer<ITeleportPad> {
     }
 
     @Override
-    public boolean supports(@NotNull Class<? super ITeleportPad> type) {
+    public boolean supports(
+            @NotNull Class<? super ITeleportPad> type
+    ) {
         return ITeleportPad.class.isAssignableFrom(type);
     }
 

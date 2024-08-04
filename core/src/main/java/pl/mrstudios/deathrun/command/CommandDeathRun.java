@@ -2,7 +2,6 @@ package pl.mrstudios.deathrun.command;
 
 import com.sk89q.worldedit.LocalSession;
 import com.sk89q.worldedit.WorldEdit;
-import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.regions.Region;
 import dev.rollczi.litecommands.annotations.argument.Arg;
 import dev.rollczi.litecommands.annotations.command.Command;
@@ -29,14 +28,15 @@ import pl.mrstudios.deathrun.config.Configuration;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
+import static com.sk89q.worldedit.bukkit.BukkitAdapter.adapt;
 import static java.lang.String.format;
 import static java.lang.String.join;
 import static java.nio.file.Files.createDirectories;
 import static java.nio.file.Files.createFile;
 import static java.nio.file.Paths.get;
+import static java.util.Collections.emptyList;
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Stream.of;
 import static net.kyori.adventure.text.minimessage.MiniMessage.miniMessage;
@@ -65,7 +65,7 @@ public class CommandDeathRun {
             @NotNull Plugin plugin,
             @NotNull WorldEdit worldEdit,
             @NotNull BukkitAudiences audiences,
-            @NotNull TrapRegistry  trapRegistry,
+            @NotNull TrapRegistry trapRegistry,
             @NotNull Configuration configuration
     ) {
         this.plugin = plugin;
@@ -147,7 +147,7 @@ public class CommandDeathRun {
 
     @Execute(name = "setup addspawn")
     @Permission("mrstudios.command.deathrun.setup")
-    public void addRunnerSpawn(
+    public void addSpawn(
             @Context Player player,
             @Arg("role") Role role
     ) {
@@ -340,19 +340,18 @@ public class CommandDeathRun {
         try {
 
             List<Location> locations = new ArrayList<>();
-
             LocalSession session = this.worldEdit.getSessionManager().findByName(player.getName());
 
             assert session != null;
             Region region = session.getSelection(session.getSelectionWorld());
 
-            region.forEach((vector) -> locations.add(BukkitAdapter.adapt(player.getWorld(), vector)));
+            region.forEach((vector) -> locations.add(adapt(player.getWorld(), vector)));
 
             return locations;
 
-        } catch (Exception ignored) {}
+        } catch (@NotNull Exception ignored) {}
 
-        return Collections.emptyList();
+        return emptyList();
 
     }
 

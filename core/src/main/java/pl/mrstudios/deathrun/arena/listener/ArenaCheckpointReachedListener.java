@@ -17,6 +17,7 @@ import pl.mrstudios.deathrun.config.Configuration;
 
 import java.util.Objects;
 
+import static java.lang.String.valueOf;
 import static java.time.Duration.ofMillis;
 import static java.time.Duration.ofSeconds;
 import static java.util.Optional.ofNullable;
@@ -92,11 +93,11 @@ public class ArenaCheckpointReachedListener implements Listener {
                                             title(
                                                     miniMessage().deserialize(
                                                             this.configuration.language().arenaCheckpointTitle
-                                                                    .replace("<checkpoint>", String.valueOf(checkpoint.id()))
+                                                                    .replace("<checkpoint>", valueOf(checkpoint.id()))
                                                     ),
                                                     miniMessage().deserialize(
                                                             this.configuration.language().arenaCheckpointSubtitle
-                                                                    .replace("<checkpoint>", String.valueOf(checkpoint.id()))
+                                                                    .replace("<checkpoint>", valueOf(checkpoint.id()))
                                                     ),
                                                     times(ofMillis(250), ofSeconds(3), ofMillis(250))
                                             )
@@ -121,13 +122,13 @@ public class ArenaCheckpointReachedListener implements Listener {
                                             title(
                                                     miniMessage().deserialize(
                                                             this.configuration.language().arenaFinishTitle
-                                                                    .replace("<position>", String.valueOf(position))
-                                                                    .replace("<seconds>", String.valueOf(time))
+                                                                    .replace("<position>", valueOf(position))
+                                                                    .replace("<seconds>", valueOf(time))
                                                     ),
                                                     miniMessage().deserialize(
                                                             this.configuration.language().arenaFinishSubtitle
-                                                                    .replace("<position>", String.valueOf(position))
-                                                                    .replace("<seconds>", String.valueOf(time))
+                                                                    .replace("<position>", valueOf(position))
+                                                                    .replace("<seconds>", valueOf(time))
                                                     ),
                                                     times(ofMillis(250), ofSeconds(3), ofMillis(250))
                                             )
@@ -141,8 +142,8 @@ public class ArenaCheckpointReachedListener implements Listener {
                                             .forEach((target) -> this.audiences.player(target).sendMessage(miniMessage().deserialize(
                                                     this.configuration.language().chatMessageArenaPlayerFinished
                                                             .replace("<player>", event.getPlayer().getDisplayName())
-                                                            .replace("<seconds>", String.valueOf(time))
-                                                            .replace("<finishPosition>", String.valueOf(position))
+                                                            .replace("<seconds>", valueOf(time))
+                                                            .replace("<finishPosition>", valueOf(position))
                                             )));
 
                                     this.configuration.language().chatMessageGameEndSpectator.stream()

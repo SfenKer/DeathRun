@@ -2,8 +2,6 @@ package pl.mrstudios.deathrun.config.impl;
 
 import eu.okaeri.configs.OkaeriConfig;
 import eu.okaeri.configs.annotation.Header;
-import eu.okaeri.configs.annotation.NameModifier;
-import eu.okaeri.configs.annotation.NameStrategy;
 import eu.okaeri.configs.annotation.Names;
 import org.bukkit.Location;
 import pl.mrstudios.deathrun.api.arena.trap.ITrap;
@@ -12,6 +10,9 @@ import pl.mrstudios.deathrun.arena.pad.TeleportPad;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static eu.okaeri.configs.annotation.NameModifier.TO_LOWER_CASE;
+import static eu.okaeri.configs.annotation.NameStrategy.HYPHEN_CASE;
 
 @Header({
         " ",
@@ -24,7 +25,8 @@ import java.util.List;
         " ",
         "--------------------------------------------------------------------------",
         " "
-}) @Names(strategy = NameStrategy.HYPHEN_CASE, modifier = NameModifier.TO_LOWER_CASE)
+}) @SuppressWarnings("deprecation")
+@Names(strategy = HYPHEN_CASE, modifier = TO_LOWER_CASE)
 public class MapConfiguration extends OkaeriConfig {
 
     public String arenaName;

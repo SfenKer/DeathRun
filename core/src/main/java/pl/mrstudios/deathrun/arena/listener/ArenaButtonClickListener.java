@@ -1,6 +1,5 @@
 package pl.mrstudios.deathrun.arena.listener;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.entity.ArmorStand;
@@ -15,15 +14,16 @@ import pl.mrstudios.deathrun.api.arena.trap.ITrap;
 import pl.mrstudios.deathrun.arena.Arena;
 import pl.mrstudios.deathrun.config.Configuration;
 
-import java.time.Duration;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import static java.lang.System.currentTimeMillis;
+import static java.time.Duration.ofMillis;
 import static java.time.Duration.ofSeconds;
 import static java.util.Optional.ofNullable;
+import static org.bukkit.ChatColor.translateAlternateColorCodes;
 import static org.bukkit.Material.*;
 import static org.bukkit.event.EventPriority.MONITOR;
 import static org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK;
@@ -102,7 +102,7 @@ public class ArenaButtonClickListener implements Listener {
                             armorStand.setCustomName(
                                     this.miniMessageToLegacy(
                                             this.configuration.language().arenaHologramTrapDelayed
-                                                    .replace("<delay>", String.valueOf(Duration.ofMillis(this.delays.getOrDefault(trap, 0L) - currentTimeMillis()).toSeconds()))
+                                                    .replace("<delay>", String.valueOf(ofMillis(this.delays.getOrDefault(trap, 0L) - currentTimeMillis()).toSeconds()))
                                     )
                             );
 
@@ -137,7 +137,7 @@ public class ArenaButtonClickListener implements Listener {
     protected String miniMessageToLegacy(
             @NotNull String message
     ) {
-        return ChatColor.translateAlternateColorCodes('&', message.replace("<red>", "&c")
+        return translateAlternateColorCodes('&', message.replace("<red>", "&c")
                 .replace("<green>", "&a")
                 .replace("<yellow>", "&e")
                 .replace("<blue>", "&9")
