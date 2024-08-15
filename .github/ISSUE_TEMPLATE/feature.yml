@@ -1,6 +1,5 @@
 name: 'Feature'
 description: 'Select if you want an feature in our plugin.'
-title: "[FEATURE] "
 labels: [ 'feature' ]
 body:
   - type: 'dropdown'
