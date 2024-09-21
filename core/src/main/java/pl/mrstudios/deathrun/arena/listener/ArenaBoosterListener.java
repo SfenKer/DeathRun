@@ -1,6 +1,5 @@
 package pl.mrstudios.deathrun.arena.listener;
 
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -20,9 +19,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
+import static java.lang.Math.toRadians;
 import static java.lang.String.valueOf;
 import static java.lang.System.currentTimeMillis;
 import static java.util.Objects.requireNonNull;
+import static net.kyori.adventure.text.minimessage.MiniMessage.miniMessage;
 import static org.bukkit.event.EventPriority.MONITOR;
 import static org.bukkit.event.block.Action.PHYSICAL;
 import static org.bukkit.inventory.ItemFlag.values;
@@ -33,7 +34,6 @@ public class ArenaBoosterListener implements Listener {
     private final Arena arena;
     private final Plugin plugin;
     private final Server server;
-    private final MiniMessage miniMessage;
     private final Configuration configuration;
 
     protected final Map<String, Map<IBooster, Long>> delay = new HashMap<>();
@@ -41,7 +41,6 @@ public class ArenaBoosterListener implements Listener {
     @Inject
     public ArenaBoosterListener(
             @NotNull Arena arena,
-            @NotNull MiniMessage miniMessage,
             @NotNull Plugin plugin,
             @NotNull Server server,
             @NotNull Configuration configuration
@@ -49,7 +48,6 @@ public class ArenaBoosterListener implements Listener {
         this.arena = arena;
         this.plugin = plugin;
         this.server = server;
-        this.miniMessage = miniMessage;
         this.configuration = configuration;
     }
 
@@ -110,7 +108,7 @@ public class ArenaBoosterListener implements Listener {
                                 event.getPlayer().getInventory().setItem(
                                         booster.slot(),
                                         new ItemBuilder(booster.delayItem().material(), boosterDelay)
-                                                .name(this.miniMessage.deserialize(booster.delayItem().name().replace("<delay>", valueOf(boosterDelay))))
+                                                .name(miniMessage().deserialize(booster.delayItem().name().replace("<delay>", valueOf(boosterDelay))))
                                                 .texture((booster.delayItem().texture() != null) ? requireNonNull(booster.delayItem().texture()) : "")
                                                 .itemFlags(values())
                                                 .build()
@@ -122,7 +120,7 @@ public class ArenaBoosterListener implements Listener {
                                 event.getPlayer().getInventory().setItem(
                                         booster.slot(),
                                         new ItemBuilder(booster.item().material())
-                                                .name(this.miniMessage.deserialize(booster.item().name()))
+                                                .name(miniMessage().deserialize(booster.item().name()))
                                                 .texture((booster.item().texture() != null) ? requireNonNull(booster.item().texture()) : "")
                                                 .itemFlags(values())
                                                 .build()
@@ -152,10 +150,10 @@ public class ArenaBoosterListener implements Listener {
                 player.setVelocity(player.getLocation().getDirection().multiply(-booster.power()).setY(0.25));
 
             case LEFT ->
-                player.setVelocity(player.getLocation().getDirection().multiply(booster.power()).rotateAroundY(Math.toRadians(90)).setY(0.25));
+                player.setVelocity(player.getLocation().getDirection().multiply(booster.power()).rotateAroundY(toRadians(90)).setY(0.25));
 
             case RIGHT ->
-                player.setVelocity(player.getLocation().getDirection().multiply(booster.power()).rotateAroundY(Math.toRadians(-90)).setY(0.25));
+                player.setVelocity(player.getLocation().getDirection().multiply(booster.power()).rotateAroundY(toRadians(-90)).setY(0.25));
 
         }
 

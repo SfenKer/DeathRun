@@ -1,2 +1,2 @@
 project.group = "pl.mrstudios.deathrun"
-project.version = "1.3.1"
+project.version = "1.3.2"
