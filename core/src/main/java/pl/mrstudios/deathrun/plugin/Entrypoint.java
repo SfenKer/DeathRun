@@ -136,7 +136,7 @@ public class Entrypoint extends JavaPlugin {
                 .schematicGenerator(angleBrackets())
 
                 /* Suggesters */
-                .argumentSuggester(String.class, ArgumentKey.of("type"), SuggestionResult.of(this.trapRegistry.list()))
+                .argumentSuggestion(String.class, ArgumentKey.of("type"), SuggestionResult.of(this.trapRegistry.trapRegistryKeys()))
 
                 /* Build */
                 .build();
